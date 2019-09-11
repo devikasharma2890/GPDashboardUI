@@ -1383,12 +1383,16 @@ th {
     width: 100%;
   }
 
+  .child-width{
+    width:100% !important;
+  }
+
   table {
     table-layout: fixed;
   }
 
   .table thead tr th {
-    width: 100px;
+    width: 90px !important;
   }
 }
 
@@ -1453,4 +1457,22 @@ button:focus { outline: none; }
   color: #333333;
   background: #fff;
   width: 100%;
+}
+.requestITLists{
+  display:flex;
+  flex-flow:column;
+  font-family: "Opens Sans Serif";
+  background-color:rgb(239, 239, 243) !important;
+}
+
+@media (min-width:360px){
+  .child-width{
+    width:100% !important;
+  }
+}
+
+@media (min-width:700px){
+  .child-width{
+    width:50% !important;
+  }
 }

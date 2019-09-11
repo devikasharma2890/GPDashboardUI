@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import SubProcessComponent from './SubProcessComponent/SubProcessComponent';
 const $ = require('jquery');
 $.DataTable = require('datatables.net');
 
@@ -29,7 +30,6 @@ class EmployeeOnboard extends Component {
       }
     componentWillMount(){
       this.CollapseTableData = this.CollapseTableData.bind(this);
-      this.HandleClick = this.HandleClick.bind(this);
       this.CallAPIs();
     }
     
@@ -71,27 +71,7 @@ class EmployeeOnboard extends Component {
 			});
     }
 
-    SetSharedFolderMSOfficeAccessStatus(itemId){
-      console.log("Set Shared Status for "+itemId);
-      var endPointUrl="http://localhost:8080/_api/web/Lists/getbytitle('NewUser_SharedFolder-MSOffice-Accesscard')/items"+
-      "?$select=RFApprovalStatus, GroupId&$filter=GroupId eq "+itemId;
-      return this.CallRESTAPI(endPointUrl);
-    }
-
-    SetVHRStatus(itemId){
-      console.log("Set VHR for "+itemId);
-      var endPointUrl="http://localhost:8080/_api/web/Lists/getbytitle('NewUser_VHR')/items"+
-      "?$select=RFApprovalStatus, GroupId&$filter=GroupId eq "+itemId
-      return this.CallRESTAPI(endPointUrl)
-    }
-
-    SetSalesForceStatus(itemId){
-      console.log("Set SalesForce Status for "+itemId);
-      var endPointUrl="http://localhost:8080/_api/web/Lists/getbytitle('NewUser-SalesForce')/items"+
-      "?$select=RFApprovalStatus, GroupId&$filter=GroupId eq "+itemId
-      return this.CallRESTAPI(endPointUrl)
-    }    
-
+   
     CallAPIs(){
  //Get Dashboard Headers
  this.GetDashboardHeaders();
@@ -121,59 +101,7 @@ class EmployeeOnboard extends Component {
      });
  return this.state.data
    })
- .then(dataResponse=>{
-  dataResponse.forEach((element)=>{
-    var SharedFolderMSOfficeAccessValue='',VHRValue='',SalesForceValue='';  
-    var endPointUrl="http://localhost:8080/_api/web/Lists/getbytitle('NewUser_SharedFolder-MSOffice-Accesscard')/items"+
-    "?$select=RFApprovalStatus, GroupId&$filter=GroupId eq "+element.Id;
-     this.CallRESTAPI(endPointUrl).then(response=>{
-     if(response.d.results.length>0){
-       element["SharedFolderMSOfficeAccess"]=response.d.results[0].RFApprovalStatus;
-       SharedFolderMSOfficeAccessValue=response.d.results[0].RFApprovalStatus;
-       Object(this.state.subProcessList).forEach((ele)=>{
-        if(ele["Id"]===element.Id)
-        ele["SharedFolderMSOfficeAccess"]=SharedFolderMSOfficeAccessValue;
-      });
-     }
-   });
-
-    endPointUrl="http://localhost:8080/_api/web/Lists/getbytitle('NewUser_VHR')/items"+
-   "?$select=RFApprovalStatus, GroupId&$filter=GroupId eq "+element.Id;
-    this.CallRESTAPI(endPointUrl).then(response=>{
-       if(response.d.results.length>0){
-         element["VHR"]=response.d.results[0].RFApprovalStatus;
-         VHRValue=response.d.results[0].RFApprovalStatus;
-         Object(this.state.subProcessList).forEach((ele)=>{
-          if(ele["Id"]===element.Id)
-          ele["VHR"]=VHRValue;
-        });
-       }
-     });
-
-      endPointUrl="http://localhost:8080/_api/web/Lists/getbytitle('NewUser-SalesForce')/items"+
-     "?$select=RFApprovalStatus, GroupId&$filter=GroupId eq "+element.Id
-      this.CallRESTAPI(endPointUrl).then(response=>{
-     if(response.d.results.length>0){
-       element["SalesForce"]=response.d.results[0].RFApprovalStatus;
-       SalesForceValue=response.d.results[0].RFApprovalStatus;
-       Object(this.state.subProcessList).forEach((ele)=>{
-         if(ele["Id"]===element.Id)
-         ele["SalesForce"]=SalesForceValue;
-       });
-     }
-   });
-   this.state.subProcessList.push(
-    {
-      Id:element.Id,
-      SharedFolderMSOfficeAccess:SharedFolderMSOfficeAccessValue,
-      VHR: VHRValue,
-      SalesForce:SalesForceValue,
-      RFApprovalStatus:element.RFApprovalStatus,
-      RFSAPStatus:element.RFSAPStatus,
-    });
- });
- return this.state
- }).then(dataRes=>{
+  .then(dataRes=>{
    console.log(dataRes)
  });
  
@@ -259,66 +187,41 @@ class EmployeeOnboard extends Component {
       formattedLabelHTML.push(<span key='red' className="hide">Rejected</span>)
       return formattedLabelHTML;
     }
-
-    HandleClick=function(element){
-      element.preventDefault();
-      var content = element.currentTarget.nextElementSibling;
-					content.className = (content.className === "hide") ? "active" : "hide";
-    }
-   
-
-  FormatSubProcessForAll = function(rowData){
-
-    var formattedHTML=[];
-    var subformattedHTML=[];
-    if(rowData.RFApprovalStatus==="UserCreation In Progress"|| rowData.RFApprovalStatus==="UserCreation Confirmed")
-    {
-      formattedHTML.push(<button key='link' onClick={this.HandleClick} className="collapsedData btn"><i className="fa fa-th-list"></i></button>)
-      if(rowData.SalesForce)
-      subformattedHTML.push(<b key='1' className={this.IndicateSubProcessStatus(rowData.SalesForce)}>SalesForce, </b>)
-      if(rowData.RFSAPStatus)
-      subformattedHTML.push(<b key='4' className={this.IndicateSubProcessStatus(rowData.RFSAPStatus)}>SAP, </b>)
-      if(rowData.VHR){
-      subformattedHTML.push(<b key='2' className={this.IndicateSubProcessStatus(rowData.VHR)}>VHR, </b>)
-      }
-      if(rowData.SharedFolderMSOfficeAccess)
-      subformattedHTML.push(<b key='3' className={this.IndicateSubProcessStatus(rowData.SharedFolderMSOfficeAccess)}>SharedFolderMSOfficeAccess </b>)
-      formattedHTML.push(<span key='grouped' id="subprocessDetails" className="hide">{subformattedHTML}</span>)
-    }
-    return formattedHTML;
-	  }
-
-	  IndicateSubProcessStatus=function(status){
-      if(status===undefined)
-      return "";
-      else 
-    return ((status.indexOf("Approve")>-1)?"green":((status.indexOf("In Progress")>-1))?"orange":((status.indexOf("Reject")>-1))?"red":"")
-    }
     
     CollapseTableData(element){
       element.preventDefault();
         var content = element.currentTarget.nextElementSibling;
+        var childWidth=element.currentTarget.parentElement.parentElement.parentElement.parentElement;
 				if(content!=null){
 				if(content.className === "card-body hide")
 				{
 					content.className =	"card-body active";
-					element.currentTarget.parentElement.className = "card card-box"
+          element.currentTarget.parentElement.className = "card card-box"
+          childWidth.classList.remove("child-width");
 				}
 				else{
 					content.className =	"card-body hide";
-					element.currentTarget.parentElement.className = "card"
+          element.currentTarget.parentElement.className = "card"
+          childWidth.classList.add("child-width");
 				}
-			}
       }
+      }
+    ShowSubProcess(rowData)
+    {
+        if(["UserCreation In Progress","UserCreation Confirmed"].indexOf(rowData.RFApprovalStatus)>-1)
+        return <SubProcessComponent thisSubProcessId={rowData.Id}/>;
+        else
+        return "";
+    }
   render() {
     return (
-      <div className="child">
+      <div className="child child-width">
 			<div className="row">
 				<div className="col-md-12">
 					<div className="card">
           <button className="btn card-header-btn" onClick={this.CollapseTableData}>
 						<div className="card-header header-grey card-header-primary">
-							<h4 className="card-title ">{this.state.tableTitle}<span className="arrow"><i className="fa fa-angle-down"></i></span></h4> 
+							<h4 className="card-title ">{this.state.tableTitle}&nbsp;<span className="arrow"><i className="fa fa-angle-down"></i></span></h4> 
 							</div>
               </button>
 						<div className="card-body hide">
@@ -332,13 +235,14 @@ class EmployeeOnboard extends Component {
                     	{this.state.data.map((rowData,key) => (
 										<tr key={key}>
 										  <td> {rowData.Created.slice(0,10)} </td>
-                      <td> {rowData.Title} {rowData.RFApprovalStatus}</td>
+                      <td> {rowData.Title}</td>
                       <td> <i className={this.IndicateStatusForAll("L1",rowData.RFApprovalStatus)} data-toggle="tooltip" data-placement="top" title={rowData.RFSupervisorName0}></i> {this.LabelStatusForAll("L1",rowData.RFApprovalStatus)}</td>
                       <td> <i className={this.IndicateStatusForAll("L2",rowData.RFApprovalStatus)} data-toggle="tooltip" data-placement="top" title={rowData.RFCountryHead}></i> {this.LabelStatusForAll("L2",rowData.RFApprovalStatus)}</td>
                       <td> <i className={this.IndicateStatusForAll("L3",rowData.RFApprovalStatus)}></i>{this.LabelStatusForAll("L3",rowData.RFApprovalStatus)} </td>
                       <td> <i className={this.IndicateStatusForAll("L4",rowData.RFApprovalStatus)}></i>{this.LabelStatusForAll("L4",rowData.RFApprovalStatus)} </td>
                       <td className="subprocess">
-                         {this.FormatSubProcessForAll(rowData)}</td>
+                         {this.ShowSubProcess(rowData)}
+                         </td>
                       </tr>
                     					))}
 									</tbody>
