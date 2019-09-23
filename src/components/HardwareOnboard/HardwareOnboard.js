@@ -57,7 +57,8 @@ class HardwareOnboard extends Component {
     async componentWillMount(){
       this.CollapseTableData = this.CollapseTableData.bind(this);
       var endPointUrl="http://localhost:8080/_api/web/Lists/getbytitle('NewUser-HWList')/items?"+
-   "&$top=10&$orderby=Created desc"
+      "$select=Created,RFOnBehalfOf,Title,RFCost,Attachment,RFTicketStatus,RFAsset,RFCIO,RFSupervisorName,RFCountryHead"+
+      "&$top=10&$orderby=Created desc"
    //endPointUrl="http://localhost:8080/_api/web/Lists/getbytitle('New User Request')/items?$top=10&$orderby=Created desc&$filter=AuthorId eq '"+currentUser+"'"
    
    //Get Data and Set in the 
@@ -213,7 +214,7 @@ class HardwareOnboard extends Component {
                   {this.state.data.map((rowData,key) => (
 										<tr key={key}>
 										  <td> {rowData.Created.slice(0,10)} </td>
-                      <td> {rowData.Title}</td>
+                      <td> {rowData.RFOnBehalfOf}</td>
                       <td><i className={this.ValueExists(rowData.RFCost,rowData.RFTicketStatus)}></i><span className="hide">{rowData.RFCost}</span></td>
                       <td> <i className={this.AttachmentExists(rowData.Attachment,rowData.RFTicketStatus)}></i> <span className="hide">{rowData.Attachment}</span></td>
                       <td> <i className={this.IndicateStatusForAll("L1", rowData.RFTicketStatus)}></i><span className="hide">{rowData.RFCIO}</span></td> 
