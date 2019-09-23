@@ -88,17 +88,17 @@ class EmployeeOnboard extends Component {
    return this.CallRESTAPI(endPointUrl)
    .then(result => {
   this.setState({data:result.d.results})
-   $('.table').DataTable({ 
-     paging:false,
-     info:false,
-     aaSorting: [[0, 'desc']],
- aoColumnDefs: [
-   {
-     bSortable: false,
-     aTargets: ['nosort']
-   }
- ]
-     });
+  $('#empOnboardTable').DataTable({ 
+    paging:false,
+    info:false,
+    aaSorting: [[0, 'desc']],
+aoColumnDefs: [
+  {
+    bSortable: false,
+    aTargets: ['nosort']
+  }
+]
+    });
  return this.state.data
    })
   .then(dataRes=>{
@@ -109,7 +109,7 @@ class EmployeeOnboard extends Component {
     }
 
 	  IndicateStatus=function(status) {
-			  return "fa "+ ((status.indexOf("Approved")>-1)
+			  return "fa "+ ((status.indexOf("Approve")>-1)
 			  ?"fa-check green"
 			  :((status.indexOf("In Progress")>-1)?"fa-clock-o orange":((status.indexOf("Rejected")>-1)?"fa-close red":"")))
     }
@@ -226,7 +226,7 @@ class EmployeeOnboard extends Component {
               </button>
 						<div className="card-body hide">
 							<div className="table-responsive">
-								<table className="table">
+								<table className="table" id="empOnboardTable">
 									<thead className=" text-primary-blue">
                   <tr>{this.state.headerList.map((headerColumn,key) =>
                      <th key={key} className={headerColumn.className}>{headerColumn.columnName}</th>)}
