@@ -7,6 +7,7 @@ class EmployeeOnboard extends Component {
   constructor(props){
     super(props);
 		this.state ={
+      flagFirstEmployeeOnboardLoad:false,
       payload : {
         method: 'GET',
         headers: { "Accept": "application/json;odata=verbose" },
@@ -30,7 +31,10 @@ class EmployeeOnboard extends Component {
       }
     componentWillMount(){
       this.CollapseTableData = this.CollapseTableData.bind(this);
-      this.CallAPIs();
+        //Get Dashboard Headers
+        this.GetDashboardHeaders();
+      
+
     }
     
     SetLevelState=function(keyValue,columnValue){
@@ -46,13 +50,6 @@ class EmployeeOnboard extends Component {
     }
 
     GetDashboardHeaders(){
-     // this.CallRESTAPI(this.state.dasboardEndPointURL)
-      //.then(headerResult=>{
-      //var level=headerResult.d.results[0];
-      // this.SetLevelState("L1",level.OData__x004c_1)
-      // this.SetLevelState("L2",level.OData__x004c_2)
-      // this.SetLevelState("L3",level.OData__x004c_3)
-      // this.SetLevelState("L4",level.OData__x004c_4)
       //Hard-coded headers
       this.SetLevelState("L1","Supervisor")
       this.SetLevelState("L2","Country Head")
@@ -73,8 +70,7 @@ class EmployeeOnboard extends Component {
 
    
     CallAPIs(){
- //Get Dashboard Headers
- this.GetDashboardHeaders();
+ 
 
  //Set Current User in the state
  return this.SetCurrentUserInState()
@@ -88,6 +84,8 @@ class EmployeeOnboard extends Component {
    return this.CallRESTAPI(endPointUrl)
    .then(result => {
   this.setState({data:result.d.results})
+  if(!this.state.flagFirstEmployeeOnboardLoad)
+{
   $('#empOnboardTable').DataTable({ 
     paging:false,
     info:false,
@@ -99,6 +97,8 @@ aoColumnDefs: [
   }
 ]
     });
+    this.setState({flagFirstEmployeeOnboardLoad:true})
+}
  return this.state.data
    })
   .then(dataRes=>{
@@ -106,6 +106,7 @@ aoColumnDefs: [
  });
  
 });
+
     }
 
 	  IndicateStatus=function(status) {
@@ -198,6 +199,7 @@ aoColumnDefs: [
 					content.className =	"card-body active";
           element.currentTarget.parentElement.className = "card card-box"
           childWidth.classList.remove("child-width");
+          this.CallAPIs();
 				}
 				else{
 					content.className =	"card-body hide";

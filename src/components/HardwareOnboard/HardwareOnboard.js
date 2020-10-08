@@ -5,6 +5,7 @@ class HardwareOnboard extends Component {
   constructor(props){
     super(props);
 		this.state ={
+      firstoOnboardHWLoad:false,
       payload : {
         method: 'GET',
         headers: { "Accept": "application/json;odata=verbose" },
@@ -56,35 +57,48 @@ class HardwareOnboard extends Component {
       }
     async componentWillMount(){
       this.CollapseTableData = this.CollapseTableData.bind(this);
+    }
+
+    
+    CallRESTAPI(endPointUrl)
+    {
+      console.log(endPointUrl);
+      return fetch(endPointUrl,this.state.payload)
+      .then(response=>{return response.json()})
+    }
+
+    SetHardwareOnboardData(){
       var endPointUrl="http://localhost:8080/_api/web/Lists/getbytitle('NewUser-HWList')/items?"+
       "$select=Created,RFOnBehalfOf,Title,RFCost,Attachment,RFTicketStatus,RFAsset,RFCIO,RFSupervisorName,RFCountryHead"+
       "&$top=10&$orderby=Created desc"
    //endPointUrl="http://localhost:8080/_api/web/Lists/getbytitle('New User Request')/items?$top=10&$orderby=Created desc&$filter=AuthorId eq '"+currentUser+"'"
    
    //Get Data and Set in the 
-   const result = await this.CallRESTAPI(endPointUrl);
-      this.setState({ data: result.d.results });
-      const dataRes = this.state.data;
-      console.log(dataRes);
-      $('#hwOnboardTable').DataTable({ 
-        paging:false,
-        info:false,
-        aaSorting: [[0, 'desc']],
-    aoColumnDefs: [
-      {
-        bSortable: false,
-        aTargets: ['nosort']
-      }
-    ]
-        });
+   return this.CallRESTAPI(endPointUrl)
+   .then(result => {
+  this.setState({data:result.d.results})
+  if(!this.state.firstoOnboardHWLoad)
+{
+  $('#hwOnboardTable').DataTable({ 
+    paging:false,
+    info:false,
+    aaSorting: [[0, 'desc']],
+aoColumnDefs: [
+  {
+    bSortable: false,
+    aTargets: ['nosort']
+  }
+]
+    });
+    this.setState({firstoOnboardHWLoad:true})
+}
+ return this.state.data
+   })
+  .then(dataRes=>{
+   console.log(dataRes)
+ });
     }
 
-    async CallRESTAPI(endPointUrl)
-    {
-      console.log(endPointUrl);
-      const response = await fetch(endPointUrl, this.state.payload);
-      return response.json();
-    }
   CollapseTableData(element){
     element.preventDefault();
       var content = element.currentTarget.nextElementSibling;
@@ -95,6 +109,7 @@ class HardwareOnboard extends Component {
         content.className =	"card-body active";
         element.currentTarget.parentElement.className = "card card-box"
         childWidth.classList.remove("child-width");
+        this.SetHardwareOnboardData();
       }
       else{
         content.className =	"card-body hide";
