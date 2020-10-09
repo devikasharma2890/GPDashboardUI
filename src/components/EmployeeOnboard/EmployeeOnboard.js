@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import SubProcessComponent from './SubProcessComponent/SubProcessComponent';
-
+const { REACT_APP_API_URL } = process.env;
 //Jquery 3.4 is used only for Data table plugin that is being used in each component.
 const $ = require('jquery');
 $.DataTable = require('datatables.net');
@@ -17,8 +17,8 @@ class EmployeeOnboard extends Component {
         headers: { "Accept": "application/json;odata=verbose" },
         credentials: 'same-origin'    // or credentials: 'include'  
       },
-      currentUserEndPointURL: "http://localhost:8080/_api/web/currentUser",
-      dasboardEndPointURL: "http://localhost:8080/_api/web/Lists/getbytitle('DashboardFlowList')/items?$select=OData__x004c_1,OData__x004c_2,OData__x004c_3,OData__x004c_4&$filter=Title eq 'NewUser'",
+      currentUserEndPointURL: REACT_APP_API_URL+"/currentUser",
+      dasboardEndPointURL: REACT_APP_API_URL+"/Lists/getbytitle('DashboardFlowList')/items?$select=OData__x004c_1,OData__x004c_2,OData__x004c_3,OData__x004c_4&$filter=Title eq 'NewUser'",
       tableTitle: "Employee Onboard",
       data: [],
       headerList: [{
@@ -74,10 +74,10 @@ class EmployeeOnboard extends Component {
     //Set Current User in the state
     return this.SetCurrentUserInState()
       .then(currentUser => {
-        var endPointUrl = "http://localhost:8080/_api/web/Lists/getbytitle('New User Request')/items?" +
+        var endPointUrl = REACT_APP_API_URL+"/Lists/getbytitle('New User Request')/items?" +
           "$select=Id,Created,Title,RFApprovalStatus,RFSupervisorName0,RFCountryHead,RFRequestorName,RFSAPStatus,RFGemsStatus,RFVirtualHR,RFMicrosoftOffice,SAP,RFSharedFolder" +
           "&$top=10&$orderby=Created desc"
-        //endPointUrl="http://localhost:8080/_api/web/Lists/getbytitle('New User Request')/items?$top=10&$orderby=Created desc&$filter=AuthorId eq '"+currentUser+"'"
+        //endPointUrl="REACT_APP_API_URL/Lists/getbytitle('New User Request')/items?$top=10&$orderby=Created desc&$filter=AuthorId eq '"+currentUser+"'"
 
         //Get Data and Set in the 
         return this.CallRESTAPI(endPointUrl)

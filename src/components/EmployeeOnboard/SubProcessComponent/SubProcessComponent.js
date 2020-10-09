@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+const { REACT_APP_API_URL } = process.env;
 class SubProcessComponent extends Component {
   constructor(props) {
     super(props);
@@ -53,14 +53,14 @@ class SubProcessComponent extends Component {
   }
 
   SetSubProcessValues = function (itemId) {
-    var endPointUrl = "http://localhost:8080/_api/web/Lists/getbytitle('NewUser_VHR')/items" +
+    var endPointUrl = REACT_APP_API_URL+"/Lists/getbytitle('NewUser_VHR')/items" +
       "?$select=RFApprovalStatus, GroupId&$filter=GroupId eq " + itemId;
     this.SetVHR(endPointUrl);
-    endPointUrl = "http://localhost:8080/_api/web/Lists/getbytitle('NewUser_SharedFolder-MSOffice-Accesscard')/items" +
+    endPointUrl = REACT_APP_API_URL+"/Lists/getbytitle('NewUser_SharedFolder-MSOffice-Accesscard')/items" +
       "?$select=RFApprovalStatus, GroupId&$filter=GroupId eq " + itemId;
     this.SetSalesForce(endPointUrl);
 
-    endPointUrl = "http://localhost:8080/_api/web/Lists/getbytitle('NewUser_VHR')/items" +
+    endPointUrl = REACT_APP_API_URL+"/Lists/getbytitle('NewUser_VHR')/items" +
       "?$select=RFApprovalStatus, GroupId&$filter=GroupId eq " + itemId;
     this.SetSharedAccessCard(endPointUrl);
 

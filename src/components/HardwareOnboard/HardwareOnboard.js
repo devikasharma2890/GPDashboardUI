@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+const { REACT_APP_API_URL } = process.env;
+
 const $ = require('jquery');
 $.DataTable = require('datatables.net');
 class HardwareOnboard extends Component {
@@ -11,8 +13,8 @@ class HardwareOnboard extends Component {
         headers: { "Accept": "application/json;odata=verbose" },
         credentials: 'same-origin'    // or credentials: 'include'  
       },
-      currentUserEndPointURL: "http://localhost:8080/_api/web/currentUser",
-      dasboardEndPointURL: "http://localhost:8080/_api/web/Lists/getbytitle('DashboardFlowList')/items?$select=OData__x004c_1,OData__x004c_2,OData__x004c_3,OData__x004c_4&$filter=Title eq 'NewUser'",
+      currentUserEndPointURL: REACT_APP_API_URL+"/currentUser",
+      dasboardEndPointURL: REACT_APP_API_URL+"/Lists/getbytitle('DashboardFlowList')/items?$select=OData__x004c_1,OData__x004c_2,OData__x004c_3,OData__x004c_4&$filter=Title eq 'NewUser'",
       tableTitle: "Onboard Hardware",
       data: [],
       headerList: [{
@@ -67,10 +69,10 @@ class HardwareOnboard extends Component {
   }
 
   SetHardwareOnboardData() {
-    var endPointUrl = "http://localhost:8080/_api/web/Lists/getbytitle('NewUser-HWList')/items?" +
+    var endPointUrl = REACT_APP_API_URL+"/Lists/getbytitle('NewUser-HWList')/items?" +
       "$select=Created,RFOnBehalfOf,Title,RFCost,Attachment,RFTicketStatus,RFAsset,RFCIO,RFSupervisorName,RFCountryHead" +
       "&$top=10&$orderby=Created desc"
-    //endPointUrl="http://localhost:8080/_api/web/Lists/getbytitle('New User Request')/items?$top=10&$orderby=Created desc&$filter=AuthorId eq '"+currentUser+"'"
+    //endPointUrl=REACT_APP_API_URL+"/Lists/getbytitle('New User Request')/items?$top=10&$orderby=Created desc&$filter=AuthorId eq '"+currentUser+"'"
 
     //Get Data and Set in the 
     return this.CallRESTAPI(endPointUrl)
