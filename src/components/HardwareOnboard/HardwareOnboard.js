@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { CallRESTAPI } from '../Helpers/Helper';
+
 const { REACT_APP_API_URL } = process.env;
 
 const $ = require('jquery');
@@ -8,13 +10,8 @@ class HardwareOnboard extends Component {
     super(props);
     this.state = {
       firstoOnboardHWLoad: false,
-      payload: {
-        method: 'GET',
-        headers: { "Accept": "application/json;odata=verbose" },
-        credentials: 'same-origin'    // or credentials: 'include'  
-      },
-      currentUserEndPointURL: REACT_APP_API_URL+"/currentUser",
-      dasboardEndPointURL: REACT_APP_API_URL+"/Lists/getbytitle('DashboardFlowList')/items?$select=OData__x004c_1,OData__x004c_2,OData__x004c_3,OData__x004c_4&$filter=Title eq 'NewUser'",
+      currentUserEndPointURL: REACT_APP_API_URL + "/currentUser",
+      dasboardEndPointURL: REACT_APP_API_URL + "/Lists/getbytitle('DashboardFlowList')/items?$select=OData__x004c_1,OData__x004c_2,OData__x004c_3,OData__x004c_4&$filter=Title eq 'NewUser'",
       tableTitle: "Onboard Hardware",
       data: [],
       headerList: [{
@@ -61,21 +58,14 @@ class HardwareOnboard extends Component {
     this.CollapseTableData = this.CollapseTableData.bind(this);
   }
 
-
-  CallRESTAPI(endPointUrl) {
-    console.log(endPointUrl);
-    return fetch(endPointUrl, this.state.payload)
-      .then(response => { return response.json() })
-  }
-
   SetHardwareOnboardData() {
-    var endPointUrl = REACT_APP_API_URL+"/Lists/getbytitle('NewUser-HWList')/items?" +
+    var endPointUrl = REACT_APP_API_URL + "/Lists/getbytitle('NewUser-HWList')/items?" +
       "$select=Created,RFOnBehalfOf,Title,RFCost,Attachment,RFTicketStatus,RFAsset,RFCIO,RFSupervisorName,RFCountryHead" +
       "&$top=10&$orderby=Created desc"
     //endPointUrl=REACT_APP_API_URL+"/Lists/getbytitle('New User Request')/items?$top=10&$orderby=Created desc&$filter=AuthorId eq '"+currentUser+"'"
 
     //Get Data and Set in the 
-    return this.CallRESTAPI(endPointUrl)
+    return CallRESTAPI(endPointUrl)
       .then(result => {
         this.setState({ data: result.d.results })
         if (!this.state.firstoOnboardHWLoad) {
