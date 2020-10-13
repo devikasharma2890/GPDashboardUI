@@ -82,9 +82,10 @@ class EmployeeOnboardComp extends Component {
     }
 
     CallAPIs = () => {
-        var endPointUrl = REACT_APP_API_URL + "/Lists/getbytitle('New User Request')/items?" +
+        var endPointUrl = REACT_APP_API_URL + "/Lists/getbytitle('"+ window.$ListNames.EmployeeOnboard + "')/items?" +
             "$select=Id,Created,Title,RFApprovalStatus,RFSupervisorName0,RFCountryHead,RFRequestorName,RFSAPStatus,RFGemsStatus,RFVirtualHR,RFMicrosoftOffice,SAP,RFSharedFolder" +
             "&$top=10&$orderby=Created desc"
+            debugger;
         //endPointUrl="REACT_APP_API_URL/Lists/getbytitle('New User Request')/items?$top=10&$orderby=Created desc&$filter=AuthorId eq '"+currentUser+"'"
         this.SetData(endPointUrl);
     }

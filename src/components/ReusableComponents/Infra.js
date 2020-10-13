@@ -5,21 +5,22 @@ class Infra extends Component {
         const currentStatus = this.props.status;
         let icon;
         switch (currentStatus) {
-            case "L4 Rejected":
+            case window.$Status.L4Rejected:
                 icon = <div><i className="fa fa-close red"  ></i><span className="hide">{currentStatus}</span></div>;
                 break;
-            case "L4 In Progress":
+            case window.$Status.L4InProgress:
                 icon = <div><i className="fa fa-clock-o orange"  ></i><span className="hide">{currentStatus}</span></div>;
                 break;
-            case "L4 Approved":
+            case window.$Status.L4Approved:
                 icon = <div><i className="fa fa-check green"  ></i><span className="hide">{currentStatus}</span></div>;
                 break;
-            case "UserCreation In Progress":
+            case window.$Status.UserCreationInProgress:
                 icon = <div><i className="fa fa-check green"  ></i><span className="hide">{currentStatus}</span></div>;
                 break;
-            case "UserCreation Confirmed":
+            case window.$Status.UserCreationConfirmed:
                 icon = <div><i className="fa fa-check green"  ></i><span className="hide">{currentStatus}</span></div>;
                 break;
+            //In Progress, L1/L2/L3 In Progress, L1/L2/L3 Approved, L1/L2/L3 Rejected 
             default:
                 icon = <div></div>;
                 break;

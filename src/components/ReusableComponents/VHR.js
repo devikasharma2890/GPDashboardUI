@@ -34,7 +34,8 @@ class VHR extends Component {
         icon = <div><b className="orange">VHR, </b></div>;
         break;
     }
-    if (this.props.currentRequestStatus === "UserCreation Confirmed") {
+    if (this.props.currentRequestStatus === window.$Status.UserCreationConfirmed) {
+      debugger;
       icon = <div><b className="green">VHR, </b></div>;
     }
 

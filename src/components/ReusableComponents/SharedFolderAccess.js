@@ -34,7 +34,7 @@ class SharedFolderAccess extends Component {
         break;
 
     }
-    if (this.props.currentRequestStatus === "UserCreation Confirmed") {
+    if (this.props.currentRequestStatus === window.$Status.UserCreationConfirmed) {
       icon = <div><b className="green">SharedFolderAccess </b></div>;
     }
     return (
