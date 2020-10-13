@@ -32,3 +32,15 @@ window.$Status={
 window.$ListNames={
   EmployeeOnboard:"New User Request"
 }
+
+
+/*To-Do for next developer
+From : Devika Sharma
+1) Add currentuser flag for Requester dashboard REST API call and skip it for Admin Dashboard, the code is mentioned
+in the EmployeeOnboardComp
+2) Replace Datatable with ReactBootstrap table to avoid the dependency on the DataTable and Jquery Plugin.
+3) Revamp whole code for HardwareOnboard using current EmployeeOnboardComp.js
+4) Separate components are made for the Supervisor, Country Head, HR, Infra, VHR, SalesForce and SharedFolderAccess so no code efforts are required.
+Just add them whereeever required. Refer the EmployeeOnboardComp.js 
+5) Use this helper for common methods and common variables like status is already mentioned and keep adding listnames here.
+*/

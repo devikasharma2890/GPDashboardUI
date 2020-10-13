@@ -39,6 +39,8 @@ class EmployeeOnboardComp extends Component {
         //Get Dashboard Headers
         this.GetDashboardHeaders();
     }
+
+    //To set the header
     SetLevelState = (keyValue, columnValue) => {
         this.state.headerList.push({ columnName: columnValue, className: "" });
         this.setState({ [keyValue]: columnValue });
@@ -53,6 +55,7 @@ class EmployeeOnboardComp extends Component {
         this.state.headerList.push({ columnName: "Sub Processes", className: "nosort" });
     };
 
+    //Get current user details: To-do : merge this in the request for requester and skip for Admin code.
     SetCurrentUserInState = () => {
         return CallRESTAPI(this.state.currentUserEndPointURL)
             .then(result => {
@@ -61,6 +64,7 @@ class EmployeeOnboardComp extends Component {
             });
     };
 
+    //To set the data in state and one time initialization for Data table
     SetData(endPointUrl) {
         CallRESTAPI(endPointUrl).then(response => {
             this.setState({ data: response.d.results })
@@ -81,6 +85,7 @@ class EmployeeOnboardComp extends Component {
         });
     }
 
+    //Initial call for this component
     CallAPIs = () => {
         var endPointUrl = REACT_APP_API_URL + "/Lists/getbytitle('"+ window.$ListNames.EmployeeOnboard + "')/items?" +
             "$select=Id,Created,Title,RFApprovalStatus,RFSupervisorName0,RFCountryHead,RFRequestorName,RFSAPStatus,RFGemsStatus,RFVirtualHR,RFMicrosoftOffice,SAP,RFSharedFolder" +
@@ -90,6 +95,7 @@ class EmployeeOnboardComp extends Component {
         this.SetData(endPointUrl);
     }
 
+    //Event method to expand and collapse the collapsible
     CollapseTableData = (element) => {
         element.preventDefault();
         var content = element.currentTarget.nextElementSibling;
