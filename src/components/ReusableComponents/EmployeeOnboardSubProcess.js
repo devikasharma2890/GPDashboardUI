@@ -1,51 +1,13 @@
 import React, { Component } from 'react';
 import VHR from "../ReusableComponents/VHR";
-import { CallRESTAPI } from '../Helpers/Helper';
 import SalesForce from './SalesForce';
 import SharedFolderAccess from './SharedFolderAccess';
 
-const { REACT_APP_API_URL } = process.env;
 class EmployeeOnboardSubProcess extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      thisSubProcessId: this.props.thisSubProcessId,
-      SharedFolderMSOfficeAccess: '',
-      SalesForce: ''
     };
-
-  }
-
-  SetVHR(endPointUrl) {
-    CallRESTAPI(endPointUrl).then(response => {
-      var VHRValue = response.d.results.length > 0 ? response.d.results[0].RFApprovalStatus : "";
-      this.setState({ VHR: VHRValue });
-    });
-  }
-
-  SetSalesForce(endPointUrl) {
-    CallRESTAPI(endPointUrl).then(response => {
-      var SharedFolderMSOfficeAccessValue = response.d.results.length > 0 ? response.d.results[0].RFApprovalStatus : "";
-      this.setState({ SharedFolderMSOfficeAccess: SharedFolderMSOfficeAccessValue });
-    });
-  }
-
-  SetSharedAccessCard(endPointUrl) {
-    CallRESTAPI(endPointUrl).then(response => {
-      var SalesForceValue = response.d.results.length > 0 ? response.d.results[0].RFApprovalStatus : "";
-      this.setState({ SalesForce: SalesForceValue });
-    });
-  }
-
-  SetSubProcessValues = function (itemId) {
-    var endPointUrl = REACT_APP_API_URL + "/Lists/getbytitle('NewUser_VHR')/items" +
-      "?$select=RFApprovalStatus, GroupId&$filter=GroupId eq " + itemId;
-    this.SetSharedAccessCard(endPointUrl);
-
-  }
-
-  IndicateSubProcessStatus = function (status) {
-    return ((["Approve", "Closed"].indexOf(status) > -1) ? "green" : ((status.indexOf("In Progress") > -1)) ? "orange" : ((status.indexOf("Reject") > -1)) ? "red" : "")
   }
 
   HandleClick = function (element) {

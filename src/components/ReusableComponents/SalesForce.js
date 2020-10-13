@@ -15,7 +15,7 @@ class SalesForce extends Component {
   }
 
   CallList = (itemId) => {
-    var endPointUrl = REACT_APP_API_URL + "/Lists/getbytitle('NewUser-SalesForce')/items" +
+    var endPointUrl = REACT_APP_API_URL + "/Lists/getbytitle('" + window.$ListNames.SalesForce + "')/items" +
       "?$select=RFApprovalStatus, GroupId&$filter=GroupId eq " + itemId;
     CallRESTAPI(endPointUrl).then(response => {
       var thisApprovalStatus = response.d.results.length > 0 ? response.d.results[0].RFApprovalStatus : "";

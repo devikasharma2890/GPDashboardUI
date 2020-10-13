@@ -11,7 +11,6 @@ class HardwareOnboard extends Component {
     this.state = {
       firstoOnboardHWLoad: false,
       currentUserEndPointURL: REACT_APP_API_URL + "/currentUser",
-      dasboardEndPointURL: REACT_APP_API_URL + "/Lists/getbytitle('DashboardFlowList')/items?$select=OData__x004c_1,OData__x004c_2,OData__x004c_3,OData__x004c_4&$filter=Title eq 'NewUser'",
       tableTitle: "Onboard Hardware",
       data: [],
       headerList: [{
@@ -59,7 +58,7 @@ class HardwareOnboard extends Component {
   }
 
   SetHardwareOnboardData() {
-    var endPointUrl = REACT_APP_API_URL + "/Lists/getbytitle('NewUser-HWList')/items?" +
+    var endPointUrl = REACT_APP_API_URL + "/Lists/getbytitle('" + window.$ListNames.HardwareOnboard + "')/items?" +
       "$select=Created,RFOnBehalfOf,Title,RFCost,Attachment,RFTicketStatus,RFAsset,RFCIO,RFSupervisorName,RFCountryHead" +
       "&$top=10&$orderby=Created desc"
     //endPointUrl=REACT_APP_API_URL+"/Lists/getbytitle('New User Request')/items?$top=10&$orderby=Created desc&$filter=AuthorId eq '"+currentUser+"'"

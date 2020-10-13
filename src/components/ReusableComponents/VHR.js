@@ -15,7 +15,7 @@ class VHR extends Component {
   }
 
   CallVHRList = (itemId) => {
-    var endPointUrl = REACT_APP_API_URL + "/Lists/getbytitle('NewUser_VHR')/items" +
+    var endPointUrl = REACT_APP_API_URL + "/Lists/getbytitle('" + window.$ListNames.VHR + "')/items" +
       "?$select=RFApprovalStatus, GroupId&$filter=GroupId eq " + itemId;
     CallRESTAPI(endPointUrl).then(response => {
       var VHRValue = response.d.results.length > 0 ? response.d.results[0].RFApprovalStatus : "";
@@ -35,7 +35,6 @@ class VHR extends Component {
         break;
     }
     if (this.props.currentRequestStatus === window.$Status.UserCreationConfirmed) {
-      debugger;
       icon = <div><b className="green">VHR, </b></div>;
     }
 

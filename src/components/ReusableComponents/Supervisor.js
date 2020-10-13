@@ -5,7 +5,6 @@ class Supervisor extends Component {
 
         const currentStatus = this.props.status;
         const currentSupervisor = this.props.supervisorname;
-        debugger;
         let icon;
         switch (currentStatus) {
             case window.$Status.L1Rejected:
