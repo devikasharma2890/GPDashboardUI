@@ -5,6 +5,7 @@ const { REACT_APP_API_URL } = process.env;
 
 const $ = require('jquery');
 $.DataTable = require('datatables.net');
+
 class HardwareOnboard extends Component {
   constructor(props) {
     super(props);
@@ -24,23 +25,23 @@ class HardwareOnboard extends Component {
       },
       {
         columnName: "Cost Details",
-        className: ""
+        className: "nosort"
       },
       {
         columnName: "Upload Quote",
-        className: ""
+        className: "nosort"
       },
       {
         columnName: "HW Infra",
-        className: ""
+        className: "nosort"
       },
       {
         columnName: "Supervisor",
-        className: ""
+        className: "nosort"
       },
       {
         columnName: "Country Head",
-        className: ""
+        className: "nosort"
       },
       {
         columnName: "Asset Details",
@@ -48,7 +49,7 @@ class HardwareOnboard extends Component {
       },
       {
         columnName: "Purchase Dept",
-        className: ""
+        className: "nosort"
       },
       ],
 
@@ -56,12 +57,27 @@ class HardwareOnboard extends Component {
   }
   async componentWillMount() {
     this.CollapseTableData = this.CollapseTableData.bind(this);
+    this.SetCurrentUserInState();
   }
 
+ //Get current user details: To-do : merge this in the request for requester and skip for Admin code.
+ SetCurrentUserInState = () => {
+        
+  return CallRESTAPI(this.state.currentUserEndPointURL)
+      .then(result => {
+          
+          this.setState({ currentUser: result.d.Id });
+         
+          return result.d.Id;
+      });
+};
+
+  
   SetHardwareOnboardData() {
+  
     var endPointUrl = REACT_APP_API_URL + "/Lists/getbytitle('NewUser-HWList')/items?" +
       "$select=Created,RFOnBehalfOf,Title,RFCost,Attachment,RFTicketStatus,RFAsset,RFCIO,RFSupervisorName,RFCountryHead" +
-      "&$top=10&$orderby=Created desc"
+      "&$top=10&$orderby=Created desc &$filter=AuthorId eq '"+this.state.currentUser+"'"
     //endPointUrl=REACT_APP_API_URL+"/Lists/getbytitle('New User Request')/items?$top=10&$orderby=Created desc&$filter=AuthorId eq '"+currentUser+"'"
 
     //Get Data and Set in the 
@@ -107,6 +123,7 @@ class HardwareOnboard extends Component {
       }
     }
   }
+  
   ValueExists(value, status) {
     var statusIcon = '';
     if (status === "PD InProgress")
@@ -115,6 +132,7 @@ class HardwareOnboard extends Component {
       statusIcon = (value !== null) ? "fa fa-check green" : "";
     return statusIcon;
   }
+
   AssetExists(value, status) {
     var statusIcon = '';
     if (status === "Closed")
@@ -123,15 +141,191 @@ class HardwareOnboard extends Component {
   }
 
   AttachmentExists(value, status) {
-    var statusIcon = '';
-    if (status === "PD InProgress")
-      statusIcon = ""
-    else
-      statusIcon = (value === "Yes") ? "fa fa-check green" : "";
-    return statusIcon;
+    //debugger;
+   // var statusIcon = '';
+    //if(value!== null && (value === "Yes"))
+    //{
+      //statusIcon = "fa fa-check green";
+      //return ((value !== null) || (value === "Yes")) ? "fa fa-check green" : statusIcon;
+    //}
+     var statusIcon = '';
+   if (status === "PD InProgress")
+   statusIcon = ""
+   else if(status === "In Progress")
+   statusIcon ="fa fa-clock-o orange"
+   else if(value!== null && (value === "Yes"))
+   statusIcon = (value === "Yes") ? "fa fa-check green" : "";
+   return statusIcon;
   }
 
+  IndicateStatusForInfra= function (status) {
+    var statusColor = '';
+    var generalGreen = "fa fa-check green";
+   
+    if (status === "L3 In Progress")
+    {
+      statusColor= "fa fa-clock-o orange"
+    }
+    else if (status === "L3 Rejected")
+    {
+      statusColor= "fa fa-close red"
+    }
+    else if (status === "AssetNumber In Progress")
+    {
+      statusColor= generalGreen;
+    }
+    else if (status === "AssetNumber Approved")
+    {
+      statusColor= generalGreen;
+    }
+    else if (status === "L3 Approved")
+    {
+      statusColor= generalGreen;
+    }
+    else if (status === "L2 Approved")
+    {
+      statusColor= generalGreen;
+    }
+    else if (status === "L1 Approved")
+    {
+      statusColor= generalGreen;
+    }
+    else if (status === "L1 In Progress")
+    {
+      statusColor= generalGreen;
+    }
+    else if (status === "L2 In Progress")
+    {
+      statusColor= generalGreen;
+    }
+    else if (status === "L1 Rejected")
+    {
+      statusColor= generalGreen;
+    }
+    else if (status === "L2 Rejected")
+    {
+      statusColor= generalGreen;
+    }
+    else if(status=== "Closed")
+    {
+      statusColor = generalGreen;
+    }
+    
+    return statusColor;
+  }
+
+  IndicateStatusForSupervisor= function (status) {
+    var statusColor = '';
+    var generalGreen = "fa fa-check green";
+    
+    if (status === "L2 In Progress" || status === "L3 Approved" )
+    {
+      statusColor= "fa fa-clock-o orange"
+    }
+    else if (status === "L2 Rejected")
+    {
+      statusColor= "fa fa-close red"
+    }
+    else if(status === "L2 Approved")
+    {
+      statusColor = generalGreen;
+    }
+    else if (status === "L1 Approved")
+    {
+      statusColor= generalGreen;
+    }
+    else if(status=== "Closed")
+    {
+      statusColor = generalGreen;
+    }
+    else if (status === "AssetNumber In Progress")
+    {
+      statusColor= generalGreen;
+    }
+    else if (status === "AssetNumber Approved")
+    {
+      statusColor= generalGreen;
+    }
+    else if (status === "L1 In Progress")
+    {
+      statusColor= generalGreen;
+    }
+    else if (status === "L1 Rejected")
+    {
+      statusColor= generalGreen;
+    }
+   
+    return statusColor;
+  }
+
+  IndicateStatusForCountryHead= function (status) {
+    var statusColor = '';
+    var generalGreen = "fa fa-check green";
+    
+     if (status === "L1 In Progress" || status=== "L2 Approved")
+    {
+      statusColor= "fa fa-clock-o orange"
+    }
+    else if (status === "L1 Rejected")
+    {
+      statusColor= "fa fa-close red"
+    }
+    else if (status === "L1 Approved")
+    {
+      statusColor= generalGreen;
+    }
+    else if(status=== "Closed")
+    {
+      statusColor = generalGreen;
+    }
+    else if (status === "AssetNumber In Progress")
+    {
+      statusColor= generalGreen;
+    }
+    else if (status === "AssetNumber Approved")
+    {
+      statusColor= generalGreen;
+    }
+   
+    return statusColor;
+  }
+  
+  IndicateStatusForPurchaseDepartment= function (status) {
+    var statusColor = '';
+    var generalGreen = "fa fa-check green";
+    if (status === "AssetNumber Approved")
+    {
+      statusColor= "fa fa-clock-o orange"
+    }
+    
+    else if(status==="Closed")
+   {
+    statusColor = generalGreen;
+   }
+    return statusColor;
+  }
+
+  IndicateStatusForAsset= function (value,status) {
+    
+    var statusIcon = '';
+    if(value!== null)
+    {
+      statusIcon = "fa fa-check green";
+      return ((value !== null) ) ? "fa fa-check green" : statusIcon;
+    }
+    else if(status==="AssetNumber In Progress")
+    {
+      statusIcon= "fa fa-clock-o orange"
+      return statusIcon;
+    }
+    
+     
+   
+  }
+
+
   IndicateStatusForAll = function (key, status) {
+   
     var statusColor = '';
     var generalGreen = "fa fa-check green";
 
@@ -152,6 +346,7 @@ class HardwareOnboard extends Component {
     }
     //Supervisor
     if (key === "L2") {
+      
       if (status.indexOf("L3") > -1)
         statusColor = generalGreen;
       else if (status.indexOf("L2") > -1)
@@ -162,6 +357,7 @@ class HardwareOnboard extends Component {
 
     //CH
     if (key === "L3") {
+      
       if (status.indexOf("L3") > -1)
         statusColor = this.IndicateStatus(status)
       else if (status.indexOf("L2") > -1)
@@ -170,7 +366,7 @@ class HardwareOnboard extends Component {
         statusColor = generalGreen;
     }
 
-    //CH
+    //PD
     if (key === "PD") {
       if (status === "Closed") {
         if (status.indexOf("L3") > -1)
@@ -215,11 +411,11 @@ class HardwareOnboard extends Component {
                           <td> {rowData.RFOnBehalfOf}</td>
                           <td><i className={this.ValueExists(rowData.RFCost, rowData.RFTicketStatus)}></i><span className="hide">{rowData.RFCost}</span></td>
                           <td> <i className={this.AttachmentExists(rowData.Attachment, rowData.RFTicketStatus)}></i> <span className="hide">{rowData.Attachment}</span></td>
-                          <td> <i className={this.IndicateStatusForAll("L1", rowData.RFTicketStatus)}></i><span className="hide">{rowData.RFCIO}</span></td>
-                          <td> <i className={this.IndicateStatusForAll("L2", rowData.RFTicketStatus)} data-toggle="tooltip" data-placement="top" title={rowData.RFSupervisorName}></i><span className="hide">{rowData.RFSupervisorName}</span></td>
-                          <td> <i className={this.IndicateStatusForAll("L3", rowData.RFTicketStatus)} data-toggle="tooltip" data-placement="top" title={rowData.RFCountryHead}></i><span className="hide">{rowData.RFCountryHead}</span></td>
-                          <td> <i className={this.AssetExists(rowData.RFAsset, rowData.RFTicketStatus)}></i><span className="">{rowData.RFAsset}</span></td>
-                          <td> <i className={this.IndicateStatusForAll("PD", rowData.RFTicketStatus)}></i></td>
+                          <td> <i className={this.IndicateStatusForInfra( rowData.RFTicketStatus)}> </i> </td>
+                          <td> <i className={this.IndicateStatusForSupervisor( rowData.RFTicketStatus)} data-toggle="tooltip" data-placement="top" title={rowData.RFSupervisorName}></i><span className="hide">{rowData.RFSupervisorName}</span></td>
+                          <td> <i className={this.IndicateStatusForCountryHead( rowData.RFTicketStatus)} data-toggle="tooltip" data-placement="top" title={rowData.RFCountryHead}></i><span className="hide">{rowData.RFCountryHead}</span></td>
+                          <td> <i className={this.IndicateStatusForAsset(rowData.RFAsset, rowData.RFTicketStatus)}></i><span className="">{rowData.RFAsset}</span></td>
+                          <td> <i className={this.IndicateStatusForPurchaseDepartment( rowData.RFTicketStatus)}></i></td>
                         </tr>
                       ))}
                     </tbody>

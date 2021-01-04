@@ -29,14 +29,17 @@ class SharedFolderAccess extends Component {
       case "Closed":
         icon = <div><b className="green">SharedFolderAccess </b></div>;
         break;
-      default:
+        case "In Progress":
         icon = <div><b className="orange">SharedFolderAccess </b></div>;
+        break;
+      default:
+      //  icon = <div><b className="orange">SharedFolderAccess </b></div>;
         break;
 
     }
-    if (this.props.currentRequestStatus === window.$Status.UserCreationConfirmed) {
-      icon = <div><b className="green">SharedFolderAccess </b></div>;
-    }
+    //if (this.props.currentRequestStatus === window.$Status.UserCreationConfirmed) {
+      //icon = <div><b className="green">SharedFolderAccess </b></div>;
+    //}
     return (
       <div>{icon}</div>
     )

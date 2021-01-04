@@ -1,9 +1,4 @@
 import React, { Component } from 'react';
-import Supervisor from '../ReusableComponents/Supervisor';
-import CountryHead from '../ReusableComponents/CountryHead';
-import HR from '../ReusableComponents/HR';
-import Infra from '../ReusableComponents/Infra';
-import EmployeeOnboardSubProcess from '../ReusableComponents/EmployeeOnboardSubProcess';
 import { CallRESTAPI } from '../Helpers/Helper';
 
 const { REACT_APP_API_URL } = process.env;
@@ -12,23 +7,31 @@ const $ = require('jquery');
 $.DataTable = require('datatables.net');
 
 
-class EmployeeOnboardComp extends Component {
+class GINAComp extends Component {
     constructor(props) {
         super(props);
         
         this.state = {
-            flagFirstEmployeeOnboardLoad: false,
+            flagFirstGINAdLoad: false,
             currentUserEndPointURL: REACT_APP_API_URL + "/currentUser",
             dasboardEndPointURL: REACT_APP_API_URL + "/Lists/getbytitle('DashboardFlowList')/items?$select=OData__x004c_1,OData__x004c_2,OData__x004c_3,OData__x004c_4&$filter=Title eq 'NewUser'",
-            tableTitle: "Employee Onboard",
+            tableTitle: "GINA",
             data: [],
             headerList: [{
                 columnName: "Created Date",
                 className: ""
             },
             {
-                columnName: "New Employee",
+                columnName: "On Behalf of",
                 className: ""
+            },
+            {
+                columnName: "PBI Admin",
+                className: "nosort"
+            },
+            {
+                columnName: "Close",
+                className: "nosort"
             },
             ],
             subProcessList: []
@@ -38,10 +41,7 @@ class EmployeeOnboardComp extends Component {
     //when the componen will load
     componentWillMount() {
        
-        //Get Dashboard Headers
-        this.GetDashboardHeaders();
-        //Get Current User Info
-        this.SetCurrentUserInState();
+     this.SetCurrentUserInState();
     }
 
     //To set the header
@@ -70,13 +70,60 @@ class EmployeeOnboardComp extends Component {
             });
     };
 
+    IndicateStatusForPBAdmin= function (status) {
+        var statusColor = '';
+        var generalGreen = "fa fa-check green";
+        
+        if (status === "In Progress")
+        {
+          statusColor= "fa fa-clock-o orange"
+        }
+        else
+         if (status === "L1 In Progress")
+        {
+          statusColor= "fa fa-clock-o orange"
+        }
+        else if (status === "L1 Rejected")
+        {
+          statusColor= "fa fa-close red"
+        }
+        else if (status === "L1 Approved")
+        {
+          statusColor= generalGreen;
+        }
+        else if(status=== "Closed")
+        {
+          statusColor = generalGreen;
+        }
+        
+       
+        return statusColor;
+      }
+     
+      IndicateStatusForClosedRequest= function (status) {
+        var statusColor = '';
+        var generalGreen = "fa fa-check green";
+        
+        
+         if(status=== "Closed")
+        {
+          statusColor = generalGreen;
+        }
+        else if(status==="L1 Approved" &&  status!== "Closed")
+        {
+            statusColor= "fa fa-clock-o orange"
+        }
+       
+        return statusColor;
+      }
+
     //To set the data in state and one time initialization for Data table
     SetData(endPointUrl) {
        
         CallRESTAPI(endPointUrl).then(response => {
             this.setState({ data: response.d.results })
-            if (!this.state.flagFirstEmployeeOnboardLoad) {
-                $('#empOnboardTable').DataTable({
+            if (!this.state.flagFirstGINAdLoad) {
+                $('#ginaAccessTable').DataTable({
                     paging: false,
                     info: false,
                     aaSorting: [[0, 'desc']],
@@ -87,7 +134,7 @@ class EmployeeOnboardComp extends Component {
                         }
                     ]
                 });
-                this.setState({ flagFirstEmployeeOnboardLoad: true })
+                this.setState({ flagFirstGINAdLoad: true })
             }
         });
     }
@@ -96,12 +143,13 @@ class EmployeeOnboardComp extends Component {
     CallAPIs = () => {
       
       
-        var endPointUrl = REACT_APP_API_URL + "/Lists/getbytitle('"+ window.$ListNames.EmployeeOnboard + "')/items?" +
-            "$select=Id,Created,Title,RFApprovalStatus,RFSupervisorName0,RFHR1,RFCountryHead,RFRequestorName,RFSAPStatus,RFGemsStatus,RFVirtualHR,RFMicrosoftOffice,SAP,RFSharedFolder,RF_Qwiki" +
+        var endPointUrl = REACT_APP_API_URL + "/Lists/getbytitle('Power BI')/items?" +
+            "$select=Id,Created,Title,RFApprovalStatus,RFOnBehalfOfText" +
             "&$orderby=Created desc&$top=10 &$filter=AuthorId eq '"+this.state.currentUser+"'"
-          
+        
          
-     this.SetData(endPointUrl);
+     
+    this.SetData(endPointUrl);
     }
 
     //Event method to expand and collapse the collapsible
@@ -123,9 +171,8 @@ class EmployeeOnboardComp extends Component {
             }
         }
     };
-    
     render() {
-        var subprocess;
+        
         
         return (
             <div className="child child-width">
@@ -139,7 +186,7 @@ class EmployeeOnboardComp extends Component {
                             </button>
                             <div className="card-body hide">
                                 <div className="table-responsive">
-                                    <table className="table" id="empOnboardTable">
+                                    <table className="table" id="ginaAccessTable">
                                         <thead className=" text-primary-blue">
                                             <tr>{this.state.headerList.map((headerColumn, key) =>
                                                 <th key={key} className={headerColumn.className}>{headerColumn.columnName}</th>)}
@@ -149,17 +196,10 @@ class EmployeeOnboardComp extends Component {
                                             {this.state.data.map((rowData, key) => (
                                                 <tr key={key}>
                                                     <td> {rowData.Created.slice(0, 10)} </td>
-                                                    <td> {rowData.Title}</td>
-                                                    <td><Supervisor status={rowData.RFApprovalStatus} supervisorname={rowData.RFSupervisorName0} /></td>
-                                                    <td><CountryHead status={rowData.RFApprovalStatus} countryheadname={rowData.RFCountryHead} /></td>
-                                                    <td><HR status={rowData.RFApprovalStatus} HRName={rowData.RFHR1} /></td>
-                                                    <td><Infra status={rowData.RFApprovalStatus} /></td>
-                                                   
-                                                    <td className="subprocess">
-                                                      
-                                                        <EmployeeOnboardSubProcess thisSubProcessId={rowData.Id} status={rowData.RFApprovalStatus} IsVHR={rowData.RFVirtualHR} IsQwiki={rowData.RF_Qwiki} IsSalesForce={rowData.RFSalesForce}  IsSharedFolder={rowData.RFSharedFolder} />
-                                                    </td>
-    
+                                                    <td> {rowData.RFOnBehalfOfText}</td>
+                                                    <td> <i className={this.IndicateStatusForPBAdmin( rowData.RFApprovalStatus)}> </i> </td>
+                                                    <td> <i className={this.IndicateStatusForClosedRequest( rowData.RFApprovalStatus)}> </i> </td>
+                                                    
                                                 </tr>
                                             ))}
                                         </tbody>
@@ -173,4 +213,4 @@ class EmployeeOnboardComp extends Component {
         );
     }
 }
-export default EmployeeOnboardComp;
+export default GINAComp;

@@ -1,35 +1,41 @@
 import React, { Component } from 'react';
-import Supervisor from '../ReusableComponents/Supervisor';
-import CountryHead from '../ReusableComponents/CountryHead';
-import HR from '../ReusableComponents/HR';
-import Infra from '../ReusableComponents/Infra';
-import EmployeeOnboardSubProcess from '../ReusableComponents/EmployeeOnboardSubProcess';
+import EmployeeExitSubProcess  from '../ReusableComponents/EmployeeExitSubProcess';
 import { CallRESTAPI } from '../Helpers/Helper';
+import DeactivateUser from '../ReusableComponents/DeactivateUser';
 
 const { REACT_APP_API_URL } = process.env;
+
 //Jquery 3.4 is used only for Data table plugin that is being used in each component.
 const $ = require('jquery');
 $.DataTable = require('datatables.net');
 
 
-class EmployeeOnboardComp extends Component {
+class EmployeeExitComp extends Component {
     constructor(props) {
         super(props);
         
         this.state = {
-            flagFirstEmployeeOnboardLoad: false,
+            flagFirstEmployeeExitLoad: false,
             currentUserEndPointURL: REACT_APP_API_URL + "/currentUser",
             dasboardEndPointURL: REACT_APP_API_URL + "/Lists/getbytitle('DashboardFlowList')/items?$select=OData__x004c_1,OData__x004c_2,OData__x004c_3,OData__x004c_4&$filter=Title eq 'NewUser'",
-            tableTitle: "Employee Onboard",
+            tableTitle: "Employee Exit",
             data: [],
             headerList: [{
                 columnName: "Created Date",
                 className: ""
             },
             {
-                columnName: "New Employee",
+                columnName: "On Behalf of",
                 className: ""
             },
+            {
+                columnName: "Country Head",
+                className: "nosort"
+              },
+              {
+                columnName: "HR",
+                className: "nosort"
+              },
             ],
             subProcessList: []
         }
@@ -38,11 +44,15 @@ class EmployeeOnboardComp extends Component {
     //when the componen will load
     componentWillMount() {
        
-        //Get Dashboard Headers
         this.GetDashboardHeaders();
-        //Get Current User Info
         this.SetCurrentUserInState();
     }
+
+    GetDashboardHeaders = () => {
+              
+        this.state.headerList.push({ columnName: "Sub Processes", className: "nosort" });
+        this.state.headerList.push({ columnName: "Deactivate User", className: "nosort" });
+    };
 
     //To set the header
     SetLevelState = (keyValue, columnValue) => {
@@ -50,14 +60,7 @@ class EmployeeOnboardComp extends Component {
         this.setState({ [keyValue]: columnValue });
     };
 
-    GetDashboardHeaders = () => {
-        //Hard-coded headers
-        this.SetLevelState("L1", "Supervisor")
-        this.SetLevelState("L2", "Country Head")
-        this.SetLevelState("L3", "HR")
-        this.SetLevelState("L4", "Infra")
-        this.state.headerList.push({ columnName: "Sub Processes", className: "nosort" });
-    };
+    
 
     //Get current user details: To-do : merge this in the request for requester and skip for Admin code.
     SetCurrentUserInState = () => {
@@ -75,8 +78,8 @@ class EmployeeOnboardComp extends Component {
        
         CallRESTAPI(endPointUrl).then(response => {
             this.setState({ data: response.d.results })
-            if (!this.state.flagFirstEmployeeOnboardLoad) {
-                $('#empOnboardTable').DataTable({
+            if (!this.state.flagFirstEmployeeExitLoad) {
+                $('#empExitTable').DataTable({
                     paging: false,
                     info: false,
                     aaSorting: [[0, 'desc']],
@@ -87,7 +90,7 @@ class EmployeeOnboardComp extends Component {
                         }
                     ]
                 });
-                this.setState({ flagFirstEmployeeOnboardLoad: true })
+                this.setState({ flagFirstEmployeeExitLoad: true })
             }
         });
     }
@@ -96,12 +99,11 @@ class EmployeeOnboardComp extends Component {
     CallAPIs = () => {
       
       
-        var endPointUrl = REACT_APP_API_URL + "/Lists/getbytitle('"+ window.$ListNames.EmployeeOnboard + "')/items?" +
-            "$select=Id,Created,Title,RFApprovalStatus,RFSupervisorName0,RFHR1,RFCountryHead,RFRequestorName,RFSAPStatus,RFGemsStatus,RFVirtualHR,RFMicrosoftOffice,SAP,RFSharedFolder,RF_Qwiki" +
+        var endPointUrl = REACT_APP_API_URL + "/Lists/getbytitle('Staff Clearance')/items?" +
+            "$select=Id,Created,RFResigneeName,RFTicketStatus,RFSupervisor1,RFCountryHead,RFHR1,RFChenStatus,RFGroupGemsStatus,RFGroupInfraStatus,RFGroupInsightStatus,RFGroupOptimumStatus,RFGroupQwikiStatus,RFGroupSalesForceStatus,RFGroupSAPStatus" +
             "&$orderby=Created desc&$top=10 &$filter=AuthorId eq '"+this.state.currentUser+"'"
           
-         
-     this.SetData(endPointUrl);
+            this.SetData(endPointUrl);
     }
 
     //Event method to expand and collapse the collapsible
@@ -123,7 +125,78 @@ class EmployeeOnboardComp extends Component {
             }
         }
     };
-    
+
+    IndicateStatusForCountryHead= function (status) {
+        var statusColor = '';
+        var generalGreen = "fa fa-check green";
+        
+        if (status === "L2 In Progress" )
+        {
+          statusColor= "fa fa-clock-o orange"
+        }
+        else if (status === "L2 Rejected")
+        {
+          statusColor= "fa fa-close red"
+        }
+        else if(status === "L2 Approved")
+        {
+          statusColor = generalGreen;
+        }
+        else if (status === "L1 Approved")
+        {
+          statusColor= generalGreen;
+        }
+        else if(status=== "Closed")
+        {
+          statusColor = generalGreen;
+        }
+        else if (status === "Support In Progress")
+        {
+          statusColor= generalGreen;
+        }
+        
+        else if (status === "L1 In Progress")
+        {
+          statusColor= generalGreen;
+        }
+        else if (status === "L1 Rejected")
+        {
+          statusColor= generalGreen;
+        }
+       
+        return statusColor;
+      }
+
+      IndicateStatusForHR= function (status) {
+        status=status.trim();
+        
+        var statusColor = '';
+        var generalGreen = "fa fa-check green";
+        
+         if (status === "L1 In Progress" || status=== "L2 Approved")
+        {
+          statusColor= "fa fa-clock-o orange"
+        }
+        else if (status === "L1 Rejected")
+        {
+          statusColor= "fa fa-close red"
+        }
+        else if (status === "L1 Approved")
+        {
+          statusColor= generalGreen;
+        }
+        else if(status=== "Closed")
+        {
+          statusColor = generalGreen;
+        }
+        else if (status === "Support In Progress")
+        {
+          statusColor= generalGreen;
+        }
+        
+        return statusColor;
+      }
+      
     render() {
         var subprocess;
         
@@ -139,7 +212,7 @@ class EmployeeOnboardComp extends Component {
                             </button>
                             <div className="card-body hide">
                                 <div className="table-responsive">
-                                    <table className="table" id="empOnboardTable">
+                                    <table className="table" id="empExitTable">
                                         <thead className=" text-primary-blue">
                                             <tr>{this.state.headerList.map((headerColumn, key) =>
                                                 <th key={key} className={headerColumn.className}>{headerColumn.columnName}</th>)}
@@ -149,17 +222,13 @@ class EmployeeOnboardComp extends Component {
                                             {this.state.data.map((rowData, key) => (
                                                 <tr key={key}>
                                                     <td> {rowData.Created.slice(0, 10)} </td>
-                                                    <td> {rowData.Title}</td>
-                                                    <td><Supervisor status={rowData.RFApprovalStatus} supervisorname={rowData.RFSupervisorName0} /></td>
-                                                    <td><CountryHead status={rowData.RFApprovalStatus} countryheadname={rowData.RFCountryHead} /></td>
-                                                    <td><HR status={rowData.RFApprovalStatus} HRName={rowData.RFHR1} /></td>
-                                                    <td><Infra status={rowData.RFApprovalStatus} /></td>
-                                                   
+                                                    <td> {rowData.RFResigneeName}</td>
+                                                    <td> <i className={this.IndicateStatusForCountryHead( rowData.RFTicketStatus)} data-toggle="tooltip" data-placement="top" title={rowData.RFCountryHead}></i><span className="hide">{rowData.RFSupervisor1}</span></td>
+                                                    <td> <i className={this.IndicateStatusForHR( rowData.RFTicketStatus)} data-toggle="tooltip" data-placement="top" title={rowData.RFHR1}></i><span className="hide">{rowData.RFCountryHead}</span></td>
                                                     <td className="subprocess">
-                                                      
-                                                        <EmployeeOnboardSubProcess thisSubProcessId={rowData.Id} status={rowData.RFApprovalStatus} IsVHR={rowData.RFVirtualHR} IsQwiki={rowData.RF_Qwiki} IsSalesForce={rowData.RFSalesForce}  IsSharedFolder={rowData.RFSharedFolder} />
-                                                    </td>
-    
+                                                    <EmployeeExitSubProcess thisSubProcessId={rowData.Id} ExitTicketStatus={rowData.RFTicketStatus} IsGemsDiamond={rowData.RFGroupGemsStatus} IsSAPWeb={rowData.RFChenStatus} IsSalesForce={rowData.RFGroupSalesForceStatus}  IsSAP={rowData.RFGroupSAPStatus} IsOptimum={rowData.RFGroupOptimumStatus} IsInsight={rowData.RFGroupInsightStatus} IsInfra={rowData.RFGroupInfraStatus} IsQwiki={rowData.RFGroupQwikiStatus} />
+                                                  </td>
+                                                  <td><DeactivateUser thisSubProcessId={rowData.Id} status={rowData.RFTicketStatus} /></td>
                                                 </tr>
                                             ))}
                                         </tbody>
@@ -173,4 +242,4 @@ class EmployeeOnboardComp extends Component {
         );
     }
 }
-export default EmployeeOnboardComp;
+export default EmployeeExitComp;

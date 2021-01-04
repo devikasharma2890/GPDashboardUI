@@ -5,6 +5,8 @@ import HR from '../ReusableComponents/HR';
 import Infra from '../ReusableComponents/Infra';
 import EmployeeOnboardSubProcess from '../ReusableComponents/EmployeeOnboardSubProcess';
 import { CallRESTAPI } from '../Helpers/Helper';
+import SystemAccessSubProcess from '../ReusableComponents/SystemAccessSubProcess';
+
 
 const { REACT_APP_API_URL } = process.env;
 //Jquery 3.4 is used only for Data table plugin that is being used in each component.
@@ -12,24 +14,29 @@ const $ = require('jquery');
 $.DataTable = require('datatables.net');
 
 
-class EmployeeOnboardComp extends Component {
+class SystemAccessComp extends Component {
     constructor(props) {
         super(props);
         
         this.state = {
-            flagFirstEmployeeOnboardLoad: false,
+            flagFirstSystemAccessLoad: false,
             currentUserEndPointURL: REACT_APP_API_URL + "/currentUser",
             dasboardEndPointURL: REACT_APP_API_URL + "/Lists/getbytitle('DashboardFlowList')/items?$select=OData__x004c_1,OData__x004c_2,OData__x004c_3,OData__x004c_4&$filter=Title eq 'NewUser'",
-            tableTitle: "Employee Onboard",
+            tableTitle: "Enterprise Application",
             data: [],
             headerList: [{
                 columnName: "Created Date",
                 className: ""
             },
             {
-                columnName: "New Employee",
+              columnName: "Id",
+              className: ""
+          },
+            {
+                columnName: "On Behalf Of",
                 className: ""
             },
+            
             ],
             subProcessList: []
         }
@@ -52,10 +59,10 @@ class EmployeeOnboardComp extends Component {
 
     GetDashboardHeaders = () => {
         //Hard-coded headers
-        this.SetLevelState("L1", "Supervisor")
-        this.SetLevelState("L2", "Country Head")
-        this.SetLevelState("L3", "HR")
-        this.SetLevelState("L4", "Infra")
+        this.SetLevelState("L2", "Supervisor")
+        this.SetLevelState("L1", "Country Head")
+      //  this.SetLevelState("L3", "HR")
+        //this.SetLevelState("L4", "Infra")
         this.state.headerList.push({ columnName: "Sub Processes", className: "nosort" });
     };
 
@@ -70,13 +77,16 @@ class EmployeeOnboardComp extends Component {
             });
     };
 
+
+    
+
     //To set the data in state and one time initialization for Data table
     SetData(endPointUrl) {
        
         CallRESTAPI(endPointUrl).then(response => {
             this.setState({ data: response.d.results })
-            if (!this.state.flagFirstEmployeeOnboardLoad) {
-                $('#empOnboardTable').DataTable({
+            if (!this.state.flagFirstSystemAccessLoad) {
+                $('#systemAccessTable').DataTable({
                     paging: false,
                     info: false,
                     aaSorting: [[0, 'desc']],
@@ -87,21 +97,28 @@ class EmployeeOnboardComp extends Component {
                         }
                     ]
                 });
-                this.setState({ flagFirstEmployeeOnboardLoad: true })
+                this.setState({ flagFirstSystemAccessLoad: true })
             }
         });
     }
 
     //Initial call for this component
     CallAPIs = () => {
-      
-      
-        var endPointUrl = REACT_APP_API_URL + "/Lists/getbytitle('"+ window.$ListNames.EmployeeOnboard + "')/items?" +
-            "$select=Id,Created,Title,RFApprovalStatus,RFSupervisorName0,RFHR1,RFCountryHead,RFRequestorName,RFSAPStatus,RFGemsStatus,RFVirtualHR,RFMicrosoftOffice,SAP,RFSharedFolder,RF_Qwiki" +
-            "&$orderby=Created desc&$top=10 &$filter=AuthorId eq '"+this.state.currentUser+"'"
+ 
+        var endPointUrl = REACT_APP_API_URL + "/Lists/getbytitle('SystemAccess Request')/items?" +
+        "$select=Id,GroupId,Created,RFOnBehalfOf,RFTicketStatus,RFSupervisorName,RFCountryHead,RFFilezilla,RFmsvisio,RFMsProject,RFMicrosoftOffice,RFSharedFolder,RFOthers0,RFSalesForce,RFSAP,RFOptimum,RFInsightChoice,RFBPC,RFEDI,RFEDI,RFDiamond,RFSAPWeb,RFSAPAdhoc" +
+        "&$orderby=Created desc&$top=10"
+        //"&$filter=AuthorId eq '"+this.state.currentUser+"'"
+
+
+        //var endPointUrl = REACT_APP_API_URL + "/Lists/getbytitle('"+ window.$ListNames.EmployeeOnboard + "')/items?" +
+          //  "$select=Id,Created,Title,RFApprovalStatus,RFSupervisorName0,RFCountryHead,RFRequestorName,RFSAPStatus,RFGemsStatus,RFVirtualHR,RFMicrosoftOffice,SAP,RFSharedFolder,RF_Qwiki" +
+            //"&$orderby=Created desc&$top=10" 
+            //"&$filter=AuthorId eq '"+this.state.currentUser+"'"
           
          
-     this.SetData(endPointUrl);
+     // var endPointUrl="REACT_APP_API_URL/Lists/getbytitle('New User Request')/items?$top=10&$orderby=Created desc&$filter=AuthorId eq '"+this.state.currentUser+"'"
+    this.SetData(endPointUrl);
     }
 
     //Event method to expand and collapse the collapsible
@@ -123,7 +140,84 @@ class EmployeeOnboardComp extends Component {
             }
         }
     };
-    
+
+
+    IndicateStatusForSupervisor= function (status) {
+        
+        var statusColor = '';
+        var generalGreen = "fa fa-check green";
+        
+        if (status === "L2 In Progress" || status === "L3 Approved" )
+        {
+          statusColor= "fa fa-clock-o orange"
+        }
+        else if (status === "L2 Rejected")
+        {
+          statusColor= "fa fa-close red"
+        }
+        else if(status === "L2 Approved")
+        {
+          statusColor = generalGreen;
+        }
+        else if (status === "L1 Approved")
+        {
+          statusColor= generalGreen;
+        }
+        else if(status=== "Closed")
+        {
+          statusColor = generalGreen;
+        }
+        else if (status === "AssetNumber In Progress")
+        {
+          statusColor= generalGreen;
+        }
+        else if (status === "AssetNumber Approved")
+        {
+          statusColor= generalGreen;
+        }
+        else if (status === "L1 In Progress")
+        {
+          statusColor= generalGreen;
+        }
+        else if (status === "L1 Rejected")
+        {
+          statusColor= generalGreen;
+        }
+       
+        return statusColor;
+      }
+      IndicateStatusForCountryHead= function (status) {
+        var statusColor = '';
+        var generalGreen = "fa fa-check green";
+        
+         if (status === "L1 In Progress" || status=== "L2 Approved")
+        {
+          statusColor= "fa fa-clock-o orange"
+        }
+        else if (status === "L1 Rejected")
+        {
+          statusColor= "fa fa-close red"
+        }
+        else if (status === "L1 Approved")
+        {
+          statusColor= generalGreen;
+        }
+        else if(status=== "Closed")
+        {
+          statusColor = generalGreen;
+        }
+        else if (status === "AssetNumber In Progress")
+        {
+          statusColor= generalGreen;
+        }
+        else if (status === "AssetNumber Approved")
+        {
+          statusColor= generalGreen;
+        }
+       
+        return statusColor;
+      }
+
     render() {
         var subprocess;
         
@@ -147,19 +241,18 @@ class EmployeeOnboardComp extends Component {
                                         <tbody>
                                             
                                             {this.state.data.map((rowData, key) => (
+                                            
                                                 <tr key={key}>
                                                     <td> {rowData.Created.slice(0, 10)} </td>
-                                                    <td> {rowData.Title}</td>
-                                                    <td><Supervisor status={rowData.RFApprovalStatus} supervisorname={rowData.RFSupervisorName0} /></td>
-                                                    <td><CountryHead status={rowData.RFApprovalStatus} countryheadname={rowData.RFCountryHead} /></td>
-                                                    <td><HR status={rowData.RFApprovalStatus} HRName={rowData.RFHR1} /></td>
-                                                    <td><Infra status={rowData.RFApprovalStatus} /></td>
-                                                   
+                                                    <td> {rowData.Id}</td>
+                                                    <td> {rowData.RFOnBehalfOf}</td>
+                                                    <td> <i className={this.IndicateStatusForSupervisor( rowData.RFTicketStatus)} data-toggle="tooltip" data-placement="top" title={rowData.RFSupervisorName}></i><span className="hide">{rowData.RFSupervisorName}</span></td>
+                                                    <td> <i className={this.IndicateStatusForCountryHead( rowData.RFTicketStatus)} data-toggle="tooltip" data-placement="top" title={rowData.RFCountryHead}></i><span className="hide">{rowData.RFCountryHead}</span></td>
+                           
                                                     <td className="subprocess">
                                                       
-                                                        <EmployeeOnboardSubProcess thisSubProcessId={rowData.Id} status={rowData.RFApprovalStatus} IsVHR={rowData.RFVirtualHR} IsQwiki={rowData.RF_Qwiki} IsSalesForce={rowData.RFSalesForce}  IsSharedFolder={rowData.RFSharedFolder} />
-                                                    </td>
-    
+                                                      <SystemAccessSubProcess thisSubProcessId={rowData.Id} status={rowData.RFTicketStatus} IsFileZilla={rowData.RFFilezilla} IsVisio={rowData.RFmsvisio} IsOffice={rowData.RFMicrosoftOffice} IsSharedFolder={rowData.RFSharedFolder} IsMSProject ={rowData.RFMsProject}  IsSalesForce={rowData.RFSalesForce} IsSAP={rowData.RFSAP} IsOptimum={rowData.RFOptimum} IsInsight={rowData.RFInsightChoice} IsBPC={rowData.RFBPC} IsEDI={rowData.RFEDI} IsGEMS={rowData.RFGems} IsDiamond={rowData.RFDiamond} IsSAPWeb={rowData.RFSAPWeb} IsSAPAdhoc={rowData.RFSAPAdhoc}/>
+                                                  </td>
                                                 </tr>
                                             ))}
                                         </tbody>
@@ -173,4 +266,4 @@ class EmployeeOnboardComp extends Component {
         );
     }
 }
-export default EmployeeOnboardComp;
+export default SystemAccessComp;

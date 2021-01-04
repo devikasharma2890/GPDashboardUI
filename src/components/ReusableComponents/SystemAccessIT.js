@@ -2,40 +2,42 @@ import React, { Component } from 'react';
 import { CallRESTAPI } from '../Helpers/Helper';
 const { REACT_APP_API_URL } = process.env;
 
-class VHR extends Component {
+class SystemAccessIT extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      VHR: '',
+        IT: '',
     };
 
   }
   componentDidMount() {
    
-    this.CallVHRList(this.props.thisVHRItemId);
+    
+    this.CallSystemAccessSoftwareList(this.props.thisSystemAccessITItemId);
   }
 
-  CallVHRList = (itemId) => {
-    var endPointUrl = REACT_APP_API_URL + "/Lists/getbytitle('NewUser_SuccessFactors & Concur')/items" +
-      "?$select=RFApprovalStatus, GroupId&$filter=GroupId eq " + itemId;
-     
+  CallSystemAccessSoftwareList = (itemId) => {
+    var endPointUrl = REACT_APP_API_URL + "/Lists/getbytitle('SystemAccess-Software')/items" +
+      "?$select=RFTicketStatus, GroupId&$filter=GroupId eq " + itemId;
+    
     CallRESTAPI(endPointUrl).then(response => {
      
-      var VHRValue = response.d.results.length > 0 ? response.d.results[0].RFApprovalStatus : "";
-      this.setState({ VHR: VHRValue });
+      var SystemAccessITValue = response.d.results.length > 0 ? response.d.results[0].RFTicketStatus : "";
+     
+      this.setState({ IT: SystemAccessITValue });
     });
   }
 
   render() {
     let icon;
-    let currentVHRStatus = this.state.VHR;
+    let currentITStatus = this.state.IT;
     
-    switch (currentVHRStatus) {
+    switch (currentITStatus) {
       case "Closed":
-        icon = <div><b className="green">VHR </b></div>;
+        icon = <div><b className="green">IT </b></div>;
         break;
         case "In Progress":
-          icon = <div><b className="orange">VHR </b></div>;
+          icon = <div><b className="orange">IT </b></div>;
           break;
       default:
         
@@ -53,4 +55,4 @@ class VHR extends Component {
   }
 }
 
-export default VHR
+export default SystemAccessIT

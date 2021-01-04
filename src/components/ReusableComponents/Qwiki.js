@@ -2,40 +2,40 @@ import React, { Component } from 'react';
 import { CallRESTAPI } from '../Helpers/Helper';
 const { REACT_APP_API_URL } = process.env;
 
-class VHR extends Component {
+class Qwiki extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      VHR: '',
+        Qwiki: '',
     };
 
   }
   componentDidMount() {
    
-    this.CallVHRList(this.props.thisVHRItemId);
+    this.CallQwikiList(this.props.thisQwikiItemId);
   }
 
-  CallVHRList = (itemId) => {
-    var endPointUrl = REACT_APP_API_URL + "/Lists/getbytitle('NewUser_SuccessFactors & Concur')/items" +
+  CallQwikiList = (itemId) => {
+    var endPointUrl = REACT_APP_API_URL + "/Lists/getbytitle('NewUser_Qwiki')/items" +
       "?$select=RFApprovalStatus, GroupId&$filter=GroupId eq " + itemId;
      
     CallRESTAPI(endPointUrl).then(response => {
-     
-      var VHRValue = response.d.results.length > 0 ? response.d.results[0].RFApprovalStatus : "";
-      this.setState({ VHR: VHRValue });
+    
+      var QwikiValue = response.d.results.length > 0 ? response.d.results[0].RFApprovalStatus : "";
+      this.setState({ Qwiki: QwikiValue });
     });
   }
 
   render() {
     let icon;
-    let currentVHRStatus = this.state.VHR;
-    
-    switch (currentVHRStatus) {
+    let currentQwikiStatus = this.state.Qwiki;
+   
+    switch (currentQwikiStatus) {
       case "Closed":
-        icon = <div><b className="green">VHR </b></div>;
+        icon = <div><b className="green">Qwiki </b></div>;
         break;
         case "In Progress":
-          icon = <div><b className="orange">VHR </b></div>;
+          icon = <div><b className="orange">Qwiki </b></div>;
           break;
       default:
         
@@ -53,4 +53,4 @@ class VHR extends Component {
   }
 }
 
-export default VHR
+export default Qwiki

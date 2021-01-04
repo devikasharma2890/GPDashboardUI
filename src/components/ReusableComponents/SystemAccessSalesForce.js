@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import { CallRESTAPI } from '../Helpers/Helper';
 const { REACT_APP_API_URL } = process.env;
 
-class SalesForce extends Component {
+class SystemAccessSalesForce extends Component {
   constructor(props) {
+    
     super(props);
     this.state = {
       SalesForce: '',
@@ -11,20 +12,26 @@ class SalesForce extends Component {
 
   }
   componentDidMount() {
-    this.CallList(this.props.thisItemId);
+    
+    this.CallList(this.props.thisSystemAccessSalesForceItemId);
   }
 
   CallList = (itemId) => {
-    var endPointUrl = REACT_APP_API_URL + "/Lists/getbytitle('NewUser-SalesForce')/items" +
-      "?$select=RFApprovalStatus, GroupId&$filter=GroupId eq " + itemId;
+      
+    var endPointUrl = REACT_APP_API_URL + "/Lists/getbytitle('SystemAccess-SalesForce')/items" +
+      "?$select=RFTicketStatus, GroupId&$filter=GroupId eq " + itemId;
     CallRESTAPI(endPointUrl).then(response => {
-      var thisApprovalStatus = response.d.results.length > 0 ? response.d.results[0].RFApprovalStatus : "";
+        
+        //console.log(response);
+       
+      var thisApprovalStatus = response.d.results.length > 0 ? response.d.results[0].RFTicketStatus : "";
       this.setState({ SalesForce: thisApprovalStatus });
     });
   }
 
   render() {
     let icon;
+    
     switch (this.state.SalesForce) {
       case "Closed":
         icon = <div><b className="green">SalesForce </b></div>;
@@ -44,7 +51,7 @@ class SalesForce extends Component {
               case "L2 In Progress":
                 icon = <div><b className="orange">SalesForce </b></div>;
                 break;
-
+                
       default:
       //  icon = <div><b className="orange">SalesForce, </b></div>;
         break;
@@ -59,4 +66,4 @@ class SalesForce extends Component {
   }
 }
 
-export default SalesForce
+export default SystemAccessSalesForce
