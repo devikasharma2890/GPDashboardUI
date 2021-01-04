@@ -8,9 +8,10 @@ import EmployeeOnboardComp from './components/EmployeeOnboard/EmployeeOnboardCom
 import SystemAccessComp from './components/SystemAccess/SystemAccessComp';
 import HardwareSoftwareComp from './components/HardwareSoftware/HardwareSoftwareComp';
 import EmployeeExitComp from './components/EmployeeExit/EmployeeExitComp';
+import RequestorDashboardComp from './components/RequestorDashboard/RequestorDashboardComp';
 
 
-
+ReactDOM.render(<RequestorDashboardComp />, document.getElementById('requestorDashboard'));
 ReactDOM.render(<EmployeeOnboardComp />, document.getElementById('employeeOnboard'));
 ReactDOM.render(<HardwareOnboard />, document.getElementById('hardwareOnboard'));
 ReactDOM.render(<SystemAccessComp />, document.getElementById('systemAccess'));
