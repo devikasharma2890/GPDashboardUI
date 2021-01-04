@@ -107,8 +107,7 @@ class SystemAccessComp extends Component {
  
         var endPointUrl = REACT_APP_API_URL + "/Lists/getbytitle('SystemAccess Request')/items?" +
         "$select=Id,GroupId,Created,RFOnBehalfOf,RFTicketStatus,RFSupervisorName,RFCountryHead,RFFilezilla,RFmsvisio,RFMsProject,RFMicrosoftOffice,RFSharedFolder,RFOthers0,RFSalesForce,RFSAP,RFOptimum,RFInsightChoice,RFBPC,RFEDI,RFEDI,RFDiamond,RFSAPWeb,RFSAPAdhoc" +
-        "&$orderby=Created desc&$top=10"
-        //"&$filter=AuthorId eq '"+this.state.currentUser+"'"
+        "&$orderby=Created desc&$top=10&$filter=AuthorId eq '"+this.state.currentUser+"'"
 
 
         //var endPointUrl = REACT_APP_API_URL + "/Lists/getbytitle('"+ window.$ListNames.EmployeeOnboard + "')/items?" +
