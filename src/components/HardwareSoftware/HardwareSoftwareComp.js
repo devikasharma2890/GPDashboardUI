@@ -94,7 +94,7 @@ class HardwareSoftwareComp extends Component {
         CallRESTAPI(endPointUrl).then(response => {
             this.setState({ data: response.d.results })
             if (!this.state.flagFirstHardwareAdLoad) {
-                $('#hardwareTable').DataTable({
+                $('#hardwareS6ftwareTable').DataTable({
                     paging: false,
                     info: false,
                     aaSorting: [[0, 'desc']],
@@ -346,7 +346,7 @@ class HardwareSoftwareComp extends Component {
                             </button>
                             <div className="card-body hide">
                                 <div className="table-responsive">
-                                    <table className="table" id="hardwareTable">
+                                    <table className="table" id="hardwareS6ftwareTable">
                                         <thead className=" text-primary-blue">
                                             <tr>{this.state.headerList.map((headerColumn, key) =>
                                                 <th key={key} className={headerColumn.className}>{headerColumn.columnName}</th>)}

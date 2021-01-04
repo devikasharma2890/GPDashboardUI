@@ -46,7 +46,7 @@ class EmployeeOnboardComp extends Component {
 
     //To set the header
     SetLevelState = (keyValue, columnValue) => {
-        this.state.headerList.push({ columnName: columnValue, className: "" });
+        this.state.headerList.push({ columnName: columnValue, className: "nosort" });
         this.setState({ [keyValue]: columnValue });
     };
 
