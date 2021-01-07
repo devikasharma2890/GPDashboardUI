@@ -28,10 +28,7 @@ class SystemAccessComp extends Component {
                 columnName: "Created Date",
                 className: ""
             },
-            {
-              columnName: "Id",
-              className: ""
-          },
+            
             {
                 columnName: "On Behalf Of",
                 className: ""
@@ -243,7 +240,7 @@ class SystemAccessComp extends Component {
                                             
                                                 <tr key={key}>
                                                     <td> {rowData.Created.slice(0, 10)} </td>
-                                                    <td> {rowData.Id}</td>
+                                                    
                                                     <td> {rowData.RFOnBehalfOf}</td>
                                                     <td> <i className={this.IndicateStatusForSupervisor( rowData.RFTicketStatus)} data-toggle="tooltip" data-placement="top" title={rowData.RFSupervisorName}></i><span className="hide">{rowData.RFSupervisorName}</span></td>
                                                     <td> <i className={this.IndicateStatusForCountryHead( rowData.RFTicketStatus)} data-toggle="tooltip" data-placement="top" title={rowData.RFCountryHead}></i><span className="hide">{rowData.RFCountryHead}</span></td>
