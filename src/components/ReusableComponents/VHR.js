@@ -32,10 +32,10 @@ class VHR extends Component {
     
     switch (currentVHRStatus) {
       case "Closed":
-        icon = <div><b className="green">VHR </b></div>;
+        icon = <div><b className="green">SuccessFactors & Concur </b></div>;
         break;
         case "In Progress":
-          icon = <div><b className="orange">VHR </b></div>;
+          icon = <div><b className="orange">SuccessFactors & Concur </b></div>;
           break;
       default:
         

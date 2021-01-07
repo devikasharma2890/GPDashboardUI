@@ -27,10 +27,10 @@ class SharedFolderAccess extends Component {
     let icon;
     switch (this.state.SharedFolderAccess) {
       case "Closed":
-        icon = <div><b className="green">SharedFolderAccess </b></div>;
+        icon = <div><b className="green">IT </b></div>;
         break;
         case "In Progress":
-        icon = <div><b className="orange">SharedFolderAccess </b></div>;
+        icon = <div><b className="orange">IT </b></div>;
         break;
       default:
       //  icon = <div><b className="orange">SharedFolderAccess </b></div>;
