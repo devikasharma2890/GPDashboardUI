@@ -6,17 +6,20 @@ class Infra extends Component {
        
         let icon;
         switch (currentStatus) {
-            case window.$Status.L4Rejected:
-                icon = <div><i className="fa fa-close red"  ></i><span className="hide">{currentStatus}</span></div>;
-                break;
-            case window.$Status.L4InProgress:
-                icon = <div><i className="fa fa-clock-o orange"  ></i><span className="hide">{currentStatus}</span></div>;
-                break;
-            case window.$Status.L4Approved:
-                icon = <div><i className="fa fa-check green"  ></i><span className="hide">{currentStatus}</span></div>;
-                break;
+            //case window.$Status.L4Rejected:
+              //  icon = <div><i className="fa fa-close red"  ></i><span className="hide">{currentStatus}</span></div>;
+                //break;
+            //case window.$Status.L4InProgress:
+              //  icon = <div><i className="fa fa-clock-o orange"  ></i><span className="hide">{currentStatus}</span></div>;
+                //break;
+            //case window.$Status.L4Approved:
+              //  icon = <div><i className="fa fa-check green"  ></i><span className="hide">{currentStatus}</span></div>;
+                //break;
+                case "L1 Approved":
+                    icon = <div><i className="fa fa-clock-o orange"  ></i><span className="hide">{currentStatus}</span></div>;
+                    break;
             case window.$Status.UserCreationInProgress:
-                icon = <div><i className="fa fa-check green"  ></i><span className="hide">{currentStatus}</span></div>;
+                icon = <div><i className="fa fa-clock-o orange"  ></i><span className="hide">{currentStatus}</span></div>;
                 break;
             case window.$Status.UserCreationConfirmed:
                 icon = <div><i className="fa fa-check green"  ></i><span className="hide">{currentStatus}</span></div>;

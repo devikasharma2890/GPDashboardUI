@@ -9,32 +9,45 @@ class CountryHead extends Component {
             case window.$Status.L2InProgress:
                 icon = <div><i className="fa fa-clock-o orange" data-toggle="tooltip" data-placement="top" title={currentCountryHead}></i><span className="hide">{currentStatus}</span></div>;
                 break;
+                case window.$Status.L3Approved:
+                icon = <div><i className="fa fa-clock-o orange" data-toggle="tooltip" data-placement="top" title={currentCountryHead}></i><span className="hide">{currentStatus}</span></div>;
+                break;
             case window.$Status.L2Rejected:
                 icon = <div><i className="fa fa-close red" data-toggle="tooltip" data-placement="top" title={currentCountryHead}></i><span className="hide">{currentStatus}</span></div>;
                 break;
-            case window.$Status.L2Approved:
+                
+           case window.$Status.L2Approved:
+               icon = <div><i className="fa fa-check green" data-toggle="tooltip" data-placement="top" title={currentCountryHead}></i><span className="hide">{currentStatus}</span></div>;
+               break;
+               case "L1 Approved":
                 icon = <div><i className="fa fa-check green" data-toggle="tooltip" data-placement="top" title={currentCountryHead}></i><span className="hide">{currentStatus}</span></div>;
                 break;
-            case window.$Status.L3InProgress:
+                case "L1 Rejected":
+                    icon = <div><i className="fa fa-check green" data-toggle="tooltip" data-placement="top" title={currentCountryHead}></i><span className="hide">{currentStatus}</span></div>;
+                    break;
+            //case window.$Status.L3InProgress:
+              //  icon = <div><i className="fa fa-check green" data-toggle="tooltip" data-placement="top" title={currentCountryHead}></i><span className="hide">{currentStatus}</span></div>;
+                //break;
+            //case window.$Status.L3Approved:
+              //  icon = <div><i className="fa fa-check green" data-toggle="tooltip" data-placement="top" title={currentCountryHead}></i><span className="hide">{currentStatus}</span></div>;
+                //break;
+            //case window.$Status.L3Rejected:
+              //  icon = <div><i className="fa fa-check green" data-toggle="tooltip" data-placement="top" title={currentCountryHead}></i><span className="hide">{currentStatus}</span></div>;
+               // break;
+            //case window.$Status.L4InProgress:
+              //  icon = <div><i className="fa fa-check green" data-toggle="tooltip" data-placement="top" title={currentCountryHead}></i><span className="hide">{currentStatus}</span></div>;
+                //break;
+                case window.$Status.L1InProgress:
                 icon = <div><i className="fa fa-check green" data-toggle="tooltip" data-placement="top" title={currentCountryHead}></i><span className="hide">{currentStatus}</span></div>;
                 break;
-            case window.$Status.L3Approved:
-                icon = <div><i className="fa fa-check green" data-toggle="tooltip" data-placement="top" title={currentCountryHead}></i><span className="hide">{currentStatus}</span></div>;
-                break;
-            case window.$Status.L3Rejected:
-                icon = <div><i className="fa fa-check green" data-toggle="tooltip" data-placement="top" title={currentCountryHead}></i><span className="hide">{currentStatus}</span></div>;
-                break;
-            case window.$Status.L4InProgress:
-                icon = <div><i className="fa fa-check green" data-toggle="tooltip" data-placement="top" title={currentCountryHead}></i><span className="hide">{currentStatus}</span></div>;
-                break;
-            case window.$Status.L4Approved:
-                icon = <div><i className="fa fa-check green" data-toggle="tooltip" data-placement="top" title={currentCountryHead}></i><span className="hide">{currentStatus}</span></div>;
-                break;
-            case window.$Status.L4Rejected:
-                icon = <div><i className="fa fa-check green" data-toggle="tooltip" data-placement="top" title={currentCountryHead}></i><span className="hide">{currentStatus}</span></div>;
-                break;
+            //case window.$Status.L4Approved:
+              //  icon = <div><i className="fa fa-check green" data-toggle="tooltip" data-placement="top" title={currentCountryHead}></i><span className="hide">{currentStatus}</span></div>;
+                //break;
+            //case window.$Status.L4Rejected:
+              //  icon = <div><i className="fa fa-check green" data-toggle="tooltip" data-placement="top" title={currentCountryHead}></i><span className="hide">{currentStatus}</span></div>;
+                //break;
             case window.$Status.UserCreationInProgress:
-                icon = <div><i className="fa fa-check green" data-toggle="tooltip" data-placement="top" title={currentCountryHead}></i><span className="hide">{currentStatus}</span></div>;
+               icon = <div><i className="fa fa-check green" data-toggle="tooltip" data-placement="top" title={currentCountryHead}></i><span className="hide">{currentStatus}</span></div>;
                 break;
             case window.$Status.UserCreationConfirmed:
                 icon = <div><i className="fa fa-check green" data-toggle="tooltip" data-placement="top" title={currentCountryHead}></i><span className="hide">{currentStatus}</span></div>;
