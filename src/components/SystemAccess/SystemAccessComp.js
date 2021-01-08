@@ -229,7 +229,7 @@ class SystemAccessComp extends Component {
                             </button>
                             <div className="card-body hide">
                                 <div className="table-responsive">
-                                    <table className="table" id="empOnboardTable">
+                                    <table className="table" id="systemAccessTable">
                                         <thead className=" text-primary-blue">
                                             <tr>{this.state.headerList.map((headerColumn, key) =>
                                                 <th key={key} className={headerColumn.className}>{headerColumn.columnName}</th>)}
