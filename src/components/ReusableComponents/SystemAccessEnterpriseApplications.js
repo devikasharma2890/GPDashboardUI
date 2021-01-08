@@ -44,6 +44,9 @@ class SystemAccessEnterpriseApplications extends Component {
           case "L2 In Progress":
           icon = <div><b className="orange">Enterprise Access </b></div>;
           break;
+          case "L2 Rejected":
+            icon = <div><b className="red">Enterprise Access </b></div>;
+            break;
       default:
         
        // icon = <div><b className="orange">VHR, </b></div>;
