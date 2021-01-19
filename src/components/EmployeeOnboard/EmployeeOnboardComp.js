@@ -23,7 +23,7 @@ class EmployeeOnboardComp extends Component {
             tableTitle: "Employee Onboard",
             data: [],
             headerList: [{
-                columnName: "Created Date",
+                columnName: "Created",
                 className: ""
             },
             {
@@ -56,7 +56,7 @@ class EmployeeOnboardComp extends Component {
         this.SetLevelState("L2", "Country Head")
         this.SetLevelState("L3", "HR")
         this.SetLevelState("L4", "Infra")
-        this.state.headerList.push({ columnName: "Sub Processes", className: "nosort" });
+        this.state.headerList.push({ columnName: "Sub Process", className: "nosort" });
     };
 
     //Get current user details: To-do : merge this in the request for requester and skip for Admin code.

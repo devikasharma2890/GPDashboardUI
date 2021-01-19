@@ -13,7 +13,7 @@ class HardwareOnboard extends Component {
       firstoOnboardHWLoad: false,
       currentUserEndPointURL: REACT_APP_API_URL + "/currentUser",
       dasboardEndPointURL: REACT_APP_API_URL + "/Lists/getbytitle('DashboardFlowList')/items?$select=OData__x004c_1,OData__x004c_2,OData__x004c_3,OData__x004c_4&$filter=Title eq 'NewUser'",
-      tableTitle: "Onboard Hardware",
+      tableTitle: "Onboard New Hardware",
       data: [],
       headerList: [{
         columnName: "Created",

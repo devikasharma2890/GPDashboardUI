@@ -25,7 +25,7 @@ class SystemAccessComp extends Component {
             tableTitle: "Enterprise Application",
             data: [],
             headerList: [{
-                columnName: "Created Date",
+                columnName: "Created",
                 className: ""
             },
             
@@ -60,7 +60,7 @@ class SystemAccessComp extends Component {
         this.SetLevelState("L1", "Country Head")
       //  this.SetLevelState("L3", "HR")
         //this.SetLevelState("L4", "Infra")
-        this.state.headerList.push({ columnName: "Sub Processes", className: "nosort" });
+        this.state.headerList.push({ columnName: "Sub Process", className: "nosort" });
     };
 
     //Get current user details: To-do : merge this in the request for requester and skip for Admin code.
@@ -83,7 +83,7 @@ class SystemAccessComp extends Component {
         CallRESTAPI(endPointUrl).then(response => {
             this.setState({ data: response.d.results })
             if (!this.state.flagFirstSystemAccessLoad) {
-                $('#systemAccessTable').DataTable({
+                    $('#systemAccessTable').DataTable({
                     paging: false,
                     info: false,
                     aaSorting: [[0, 'desc']],
