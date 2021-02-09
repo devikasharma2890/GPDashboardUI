@@ -30,7 +30,7 @@ class SystemAccessComp extends Component {
             },
             
             {
-                columnName: "On Behalf Of",
+                columnName: "On Behalf of",
                 className: ""
             },
             

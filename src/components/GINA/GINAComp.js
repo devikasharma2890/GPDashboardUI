@@ -18,7 +18,7 @@ class GINAComp extends Component {
             tableTitle: "GINA",
             data: [],
             headerList: [{
-                columnName: "Created Date",
+                columnName: "Created",
                 className: ""
             },
             {

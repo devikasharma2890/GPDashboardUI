@@ -18,7 +18,7 @@ class HardwareSoftwareComp extends Component {
             tableTitle: "Hardware and Software",
             data: [],
             headerList: [{
-                columnName: "Created Date",
+                columnName: "Created",
                 className: ""
             },
             {
