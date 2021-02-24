@@ -228,7 +228,7 @@ class EmployeeExitComp extends Component {
                                                     <td className="subprocess">
                                                     <EmployeeExitSubProcess thisSubProcessId={rowData.Id} ExitTicketStatus={rowData.RFTicketStatus} IsGemsDiamond={rowData.RFGroupGemsStatus} IsSAPWeb={rowData.RFChenStatus} IsSalesForce={rowData.RFGroupSalesForceStatus}  IsSAP={rowData.RFGroupSAPStatus} IsOptimum={rowData.RFGroupOptimumStatus} IsInsight={rowData.RFGroupInsightStatus} IsInfra={rowData.RFGroupInfraStatus} IsQwiki={rowData.RFGroupQwikiStatus} />
                                                   </td>
-                                                  <td><DeactivateUser thisSubProcessId={rowData.Id} status={rowData.RFTicketStatus} /></td>
+                                                  <td><DeactivateUser thisSubProcessId={rowData.Id} status={rowData.RFGroupInfraStatus} /></td>
                                                 </tr>
                                             ))}
                                         </tbody>

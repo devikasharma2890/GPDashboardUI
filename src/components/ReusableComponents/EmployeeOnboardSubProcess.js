@@ -18,7 +18,9 @@ class EmployeeOnboardSubProcess extends Component {
       IsVHR:this.props.IsVHR,
       IsQwiki:this.props.IsQwiki,
       IsSalesForce: this.props.IsSalesForce,
-      IsSharedFolder: this.props.IsSharedFolder
+      IsSharedFolder: this.props.IsSharedFolder,
+      IsOffice: this.props.IsOffice,
+      IsAccessCard : this.props.IsAccessCard
     };
 
   }
@@ -78,11 +80,13 @@ class EmployeeOnboardSubProcess extends Component {
     const currentQwikiStatus = this.props.IsQwiki;
     const currentSalesForceStatus = this.props.IsSalesForce;
     const currentSharedFolderStatus = this.props.IsSharedFolder;
+    const currentIsOfficeStatus= this.props.IsOffice;
+    const currentIsAccessCard= this.props.IsAccessCard;
     
 
 
     //if (currentStatus.includes("UserCreation")) {
-      if (currentStatus.includes("UserCreation Confirmed") && (currentVHRStatus ||currentQwikiStatus || currentSalesForceStatus ||currentSharedFolderStatus) ) {
+      if (currentStatus.includes("UserCreation Confirmed") && (currentVHRStatus ||currentQwikiStatus || currentSalesForceStatus ||currentSharedFolderStatus || currentIsOfficeStatus || currentIsAccessCard )  ) {
      
       console.log("Render method of EmployeeOnBoardSubProcess");
       subprocessExist = <div><button onClick={this.HandleClick} className="collapsedData btn">

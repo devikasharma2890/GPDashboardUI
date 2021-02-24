@@ -38,6 +38,7 @@ class EmployeeOnboardComp extends Component {
     //when the componen will load
     componentWillMount() {
        
+        debugger;
         //Get Dashboard Headers
         this.GetDashboardHeaders();
         //Get Current User Info
@@ -72,7 +73,7 @@ class EmployeeOnboardComp extends Component {
 
     //To set the data in state and one time initialization for Data table
     SetData(endPointUrl) {
-       
+       debugger;
         CallRESTAPI(endPointUrl).then(response => {
             this.setState({ data: response.d.results })
             if (!this.state.flagFirstEmployeeOnboardLoad) {
@@ -95,9 +96,9 @@ class EmployeeOnboardComp extends Component {
     //Initial call for this component
     CallAPIs = () => {
       
-      
+      debugger;
         var endPointUrl = REACT_APP_API_URL + "/Lists/getbytitle('"+ window.$ListNames.EmployeeOnboard + "')/items?" +
-            "$select=Id,Created,Title,RFApprovalStatus,RFSupervisorName0,RFHR1,RFCountryHead,RFRequestorName,RFSAPStatus,RFGemsStatus,RFVirtualHR,RFMicrosoftOffice,SAP,RFSharedFolder,RF_Qwiki" +
+            "$select=Id,Created,Title,RFApprovalStatus,RFSupervisorName0,RFHR1,RFCountryHead,RFRequestorName,RFSAPStatus,RFGemsStatus,RFVirtualHR,RFAccessCard,RFMicrosoftOffice,SAP,RFSharedFolder,RF_Qwiki" +
             "&$orderby=Created desc&$top=10 &$filter=AuthorId eq '"+this.state.currentUser+"'"
           
          
@@ -157,7 +158,7 @@ class EmployeeOnboardComp extends Component {
                                                    
                                                     <td className="subprocess">
                                                       
-                                                        <EmployeeOnboardSubProcess thisSubProcessId={rowData.Id} status={rowData.RFApprovalStatus} IsVHR={rowData.RFVirtualHR} IsQwiki={rowData.RF_Qwiki} IsSalesForce={rowData.RFSalesForce}  IsSharedFolder={rowData.RFSharedFolder} />
+                                                        <EmployeeOnboardSubProcess thisSubProcessId={rowData.Id} status={rowData.RFApprovalStatus} IsVHR={rowData.RFVirtualHR} IsQwiki={rowData.RF_Qwiki} IsSalesForce={rowData.RFSalesForce}  IsSharedFolder={rowData.RFSharedFolder} IsOffice={rowData.RFMicrosoftOffice} IsAccessCard={rowData.RFAccessCard} />
                                                     </td>
     
                                                 </tr>
