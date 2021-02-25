@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { CallRESTAPI } from '../Helpers/Helper';
 
+import moment from "moment-timezone";
+
 const { REACT_APP_API_URL } = process.env;
 //Jquery 3.4 is used only for Data table plugin that is being used in each component.
 const $ = require('jquery');
@@ -116,7 +118,7 @@ class HardwareSoftwareComp extends Component {
       
         var endPointUrl = REACT_APP_API_URL + "/Lists/getbytitle('Hardware Software Requisition Form')/items?" +
         "$select=Created,RFOnBehalfOf,Title,RFCost,Attachment,RFTicketStatus,RFAsset,RFCIO,RFSupervisorName,RFCountryHead" +
-        "&$top=10&$orderby=Created desc &$filter=AuthorId eq '"+this.state.currentUser+"'"
+        "&$orderby=Created desc&$top=10 &$filter=AuthorId eq '"+this.state.currentUser+"'"
           
          
      // var endPointUrl="REACT_APP_API_URL/Lists/getbytitle('New User Request')/items?$top=10&$orderby=Created desc&$filter=AuthorId eq '"+this.state.currentUser+"'"
@@ -355,7 +357,7 @@ class HardwareSoftwareComp extends Component {
                                             
                                             {this.state.data.map((rowData, key) => (
                                                 <tr key={key}>
-                                                    <td> {rowData.Created.slice(0, 10)} </td>
+                                                   <td>{ moment(rowData.Created).tz('Asia/Singapore').format("YYYY-MM-DD")} </td>
                                                     <td> {rowData.RFOnBehalfOf}</td>
                                                     <td><i className={this.ValueExists(rowData.RFCost, rowData.RFTicketStatus)}></i><span className="hide">{rowData.RFCost}</span></td>
                           <td> <i className={this.AttachmentExists(rowData.Attachment, rowData.RFTicketStatus)}></i> <span className="hide">{rowData.Attachment}</span></td>

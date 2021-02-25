@@ -3,6 +3,8 @@ import EmployeeExitSubProcess  from '../ReusableComponents/EmployeeExitSubProces
 import { CallRESTAPI } from '../Helpers/Helper';
 import DeactivateUser from '../ReusableComponents/DeactivateUser';
 
+import moment from "moment-timezone";
+
 const { REACT_APP_API_URL } = process.env;
 
 //Jquery 3.4 is used only for Data table plugin that is being used in each component.
@@ -221,7 +223,7 @@ class EmployeeExitComp extends Component {
                                             
                                             {this.state.data.map((rowData, key) => (
                                                 <tr key={key}>
-                                                    <td> {rowData.Created.slice(0, 10)} </td>
+                                                    <td>{ moment(rowData.Created).tz('Asia/Singapore').format("YYYY-MM-DD")} </td>
                                                     <td> {rowData.RFResigneeName}</td>
                                                     <td> <i className={this.IndicateStatusForCountryHead( rowData.RFTicketStatus)} data-toggle="tooltip" data-placement="top" title={rowData.RFCountryHead}></i><span className="hide">{rowData.RFSupervisor1}</span></td>
                                                     <td> <i className={this.IndicateStatusForHR( rowData.RFTicketStatus)} data-toggle="tooltip" data-placement="top" title={rowData.RFHR1}></i><span className="hide">{rowData.RFCountryHead}</span></td>

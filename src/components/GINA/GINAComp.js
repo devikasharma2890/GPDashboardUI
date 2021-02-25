@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { CallRESTAPI } from '../Helpers/Helper';
 
+import moment from "moment-timezone";
+
+
 const { REACT_APP_API_URL } = process.env;
 //Jquery 3.4 is used only for Data table plugin that is being used in each component.
 const $ = require('jquery');
@@ -195,7 +198,7 @@ class GINAComp extends Component {
                                             
                                             {this.state.data.map((rowData, key) => (
                                                 <tr key={key}>
-                                                    <td> {rowData.Created.slice(0, 10)} </td>
+                                                   <td>{ moment(rowData.Created).tz('Asia/Singapore').format("YYYY-MM-DD")} </td>
                                                     <td> {rowData.RFOnBehalfOfText}</td>
                                                     <td> <i className={this.IndicateStatusForPBAdmin( rowData.RFApprovalStatus)}> </i> </td>
                                                     <td> <i className={this.IndicateStatusForClosedRequest( rowData.RFApprovalStatus)}> </i> </td>
