@@ -68,18 +68,18 @@ class HardwareOnboard extends Component {
   return CallRESTAPI(this.state.currentUserEndPointURL)
       .then(result => {
           
-          this.setState({ currentUser: result.d.Id });
-         
-          return result.d.Id;
+          this.setState({ currentUser: result.d.Title });
+         debugger;
+          return result.d.Title;
       });
 };
 
   
   SetHardwareOnboardData() {
-  
+  debugger;
     var endPointUrl = REACT_APP_API_URL + "/Lists/getbytitle('NewUser-HWList')/items?" +
       "$select=Created,RFOnBehalfOf,Title,RFCost,Attachment,RFTicketStatus,RFAsset,RFCIO,RFSupervisorName,RFCountryHead" +
-      "&$orderby=Created desc&$top=10 &$filter=AuthorId eq '"+this.state.currentUser+"'"
+      "&$orderby=Created desc&$top=10 &$filter=Title eq '"+this.state.currentUser+"'"
     //endPointUrl=REACT_APP_API_URL+"/Lists/getbytitle('New User Request')/items?$top=10&$orderby=Created desc&$filter=AuthorId eq '"+currentUser+"'"
 
     //Get Data and Set in the 
